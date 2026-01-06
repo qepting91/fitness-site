@@ -1,0 +1,29 @@
+{
+    "name": "Home Core Routine",
+    "path": "core",
+    "dayOfWeek": "tuesday,saturday",
+    "description": "No equipment needed. Spine-safe core exercises to do at home. 3 rounds with 60s rest between rounds.",
+    "structure": "circuit",
+    "restBetweenSets": "60 seconds between rounds",
+    "rounds": 3,
+    "exercises": [
+        {
+            "slug": "dead-bug",
+            "sets": "3",
+            "reps": "10",
+            "notes": "Per side - back pressed to floor"
+        },
+        {
+            "slug": "bird-dog",
+            "sets": "3",
+            "reps": "8",
+            "notes": "Per side - neutral spine, extend arm/leg"
+        },
+        {
+            "slug": "alternate-heel-touchers",
+            "sets": "3",
+            "reps": "20",
+            "notes": "Total taps - side-to-side crunch"
+        }
+    ]
+}

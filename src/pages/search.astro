@@ -1,0 +1,208 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const exercises = await getCollection('exercises');
+
+// Prepare data for client-side search (filter out mapping file if present)
+const exerciseData = exercises
+  .filter(e => !e.id.startsWith('_'))
+  .map(e => ({
+    id: e.id,
+    name: e.data.name,
+    primaryMuscles: e.data.primaryMuscles,
+    category: e.data.category,
+    equipment: e.data.equipment,
+    images: e.data.images,
+    instructions: e.data.instructions,
+  }));
+---
+
+<BaseLayout title="Search Exercises">
+  <header class="mb-6">
+    <h1 class="text-xl font-bold text-slate-100 mb-4">Search Exercises</h1>
+    
+    <!-- Search Input -->
+    <div class="relative">
+      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input 
+        type="search" 
+        id="search-input"
+        placeholder="Search by name, muscle, equipment..."
+        class="w-full pl-12 pr-4 py-3 bg-slate-900/80 border border-slate-700/50 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 min-h-[48px]"
+      />
+    </div>
+
+    <!-- Filter Pills -->
+    <div class="flex gap-2 mt-3 overflow-x-auto pb-2 -mx-4 px-4">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="chest">Chest</button>
+      <button class="filter-btn" data-filter="back">Back</button>
+      <button class="filter-btn" data-filter="shoulders">Shoulders</button>
+      <button class="filter-btn" data-filter="legs">Legs</button>
+      <button class="filter-btn" data-filter="arms">Arms</button>
+      <button class="filter-btn" data-filter="core">Core</button>
+    </div>
+  </header>
+
+  <!-- Results -->
+  <div id="results-count" class="text-sm text-slate-500 mb-3">
+    Showing {exerciseData.length} exercises
+  </div>
+  
+  <div id="results" class="space-y-3">
+    <!-- Results will be populated by JavaScript -->
+  </div>
+
+  <!-- No Results -->
+  <div id="no-results" class="hidden text-center py-8">
+    <p class="text-slate-400">No exercises found</p>
+    <p class="text-slate-500 text-sm mt-1">Try a different search term</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .filter-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background-color: rgba(30, 41, 59, 0.6);
+    color: #94a3b8;
+    border: 1px solid rgba(51, 65, 85, 0.5);
+  }
+  .filter-btn:hover {
+    background-color: rgba(51, 65, 85, 0.6);
+    color: #cbd5e1;
+  }
+  .filter-btn.active {
+    background-color: rgba(139, 92, 246, 0.2);
+    color: #a78bfa;
+    border-color: rgba(139, 92, 246, 0.5);
+  }
+</style>
+
+<script define:vars={{ exerciseData }}>
+  // Initialize search
+  const searchInput = document.getElementById('search-input');
+  const resultsContainer = document.getElementById('results');
+  const resultsCount = document.getElementById('results-count');
+  const noResults = document.getElementById('no-results');
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  
+  let currentFilter = 'all';
+  let allExercises = exerciseData;
+
+  // Render results
+  function renderResults(exercises) {
+    if (exercises.length === 0) {
+      resultsContainer.innerHTML = '';
+      noResults.classList.remove('hidden');
+      resultsCount.textContent = 'No exercises found';
+      return;
+    }
+    
+    noResults.classList.add('hidden');
+    resultsCount.textContent = `Showing ${exercises.length} exercise${exercises.length === 1 ? '' : 's'}`;
+    
+    resultsContainer.innerHTML = exercises.map(ex => `
+      <details class="exercise-details group">
+        <summary class="pr-2">
+          <div class="flex-1 min-w-0">
+            <h3 class="font-semibold text-slate-100 truncate mb-1">${ex.name}</h3>
+            <div class="flex items-center gap-2">
+              ${ex.primaryMuscles.map(m => `<span class="badge badge-muscle">${m}</span>`).join('')}
+              <span class="badge badge-equipment">${ex.equipment}</span>
+            </div>
+          </div>
+          <svg class="chevron w-5 h-5 text-slate-500 transition-transform duration-200 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </summary>
+        <div class="p-4 space-y-4">
+          ${ex.images && ex.images.length > 0 ? `
+            <div class="grid gap-4 ${ex.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}">
+              ${ex.images.map((img, i) => `
+                <div class="relative aspect-video bg-slate-800 rounded-lg overflow-hidden">
+                  <img src="${img}" alt="${ex.name} ${i + 1}" class="w-full h-full object-contain" loading="lazy" />
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+          ${ex.instructions.length > 0 ? `
+            <div class="space-y-2">
+              <h4 class="text-sm font-semibold text-slate-300 uppercase tracking-wide">Instructions</h4>
+              <ol class="space-y-2 text-sm text-slate-400">
+                ${ex.instructions.map((step, i) => `
+                  <li class="flex gap-3">
+                    <span class="flex-shrink-0 w-6 h-6 rounded-full bg-violet-500/20 text-violet-400 text-xs flex items-center justify-center font-medium">${i + 1}</span>
+                    <span class="pt-0.5">${step}</span>
+                  </li>
+                `).join('')}
+              </ol>
+            </div>
+          ` : ''}
+        </div>
+      </details>
+    `).join('');
+  }
+
+  // Filter function
+  function filterExercises(searchTerm, filter) {
+    let results = allExercises;
+    
+    // Apply body part filter (now using primaryMuscles and category)
+    if (filter !== 'all') {
+      const filterMap = {
+        chest: ['chest', 'pectorals'],
+        back: ['back', 'lats', 'traps'],
+        shoulders: ['shoulders', 'delts', 'deltoids'],
+        legs: ['legs', 'quads', 'hamstrings', 'glutes', 'calves'],
+        arms: ['arms', 'biceps', 'triceps', 'forearms'],
+        core: ['core', 'abs', 'abdominals', 'obliques'],
+      };
+      
+      const terms = filterMap[filter] || [filter];
+      results = results.filter(ex => {
+        // Check primaryMuscles array and category
+        const muscleMatch = ex.primaryMuscles.some(m => terms.some(t => m.toLowerCase().includes(t)));
+        const categoryMatch = terms.some(t => ex.category.toLowerCase().includes(t));
+        return muscleMatch || categoryMatch;
+      });
+    }
+    
+    // Apply search term
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      results = results.filter(ex => {
+        const muscles = ex.primaryMuscles.join(' ');
+        const searchStr = `${ex.name} ${muscles} ${ex.equipment} ${ex.category}`.toLowerCase();
+        return searchStr.includes(term);
+      });
+    }
+    
+    return results;
+  }
+
+  // Event handlers
+  searchInput.addEventListener('input', (e) => {
+    const results = filterExercises(e.target.value, currentFilter);
+    renderResults(results);
+  });
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      const results = filterExercises(searchInput.value, currentFilter);
+      renderResults(results);
+    });
+  });
+
+  // Initial render
+  renderResults(allExercises);
+</script>

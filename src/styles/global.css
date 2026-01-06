@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/* Custom styles for fitness app */
+
+/* Touch-friendly button base */
+.btn {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn-primary {
+  background: linear-gradient(to right, #7c3aed, #4f46e5);
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.25);
+}
+
+.btn-secondary {
+  background-color: rgba(30, 41, 59, 0.8);
+  color: #e2e8f0;
+  border: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+/* Card component */
+.card {
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(30, 41, 59, 0.5);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.card-interactive {
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(30, 41, 59, 0.5);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.card-interactive:hover {
+  border-color: rgba(51, 65, 85, 0.7);
+  background-color: rgba(30, 41, 59, 0.6);
+}
+
+.card-interactive:active {
+  transform: scale(0.98);
+}
+
+/* Exercise accordion */
+.exercise-details {
+  border: 1px solid rgba(30, 41, 59, 0.5);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background-color: rgba(15, 23, 42, 0.4);
+}
+
+.exercise-details summary {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.exercise-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.exercise-details[open] summary {
+  border-bottom: 1px solid rgba(30, 41, 59, 0.5);
+}
+
+.exercise-details[open] .chevron {
+  transform: rotate(180deg);
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-muscle {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-equipment {
+  background-color: rgba(14, 165, 233, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+.badge-superset {
+  background-color: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Safe area padding */
+.pb-safe {
+  padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+}

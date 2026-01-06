@@ -1,0 +1,38 @@
+{
+    "name": "Option A: Gun Show",
+    "path": "optional",
+    "dayOfWeek": "tuesday,saturday",
+    "description": "Free Weight Hypertrophy - Focus on Biceps, Triceps, Shoulders using Dumbbells/Bars.",
+    "structure": "straight sets",
+    "restBetweenSets": "60 seconds",
+    "exercises": [
+        {
+            "slug": "ez-bar-curl",
+            "sets": "3",
+            "reps": "12"
+        },
+        {
+            "slug": "band-skull-crusher",
+            "sets": "3",
+            "reps": "12",
+            "notes": "Skullcrushers - lower to forehead"
+        },
+        {
+            "slug": "concentration-curls",
+            "sets": "3",
+            "reps": "12",
+            "notes": "Per arm, seated"
+        },
+        {
+            "slug": "tricep-dumbbell-kickback",
+            "sets": "3",
+            "reps": "15",
+            "notes": "Per arm"
+        },
+        {
+            "slug": "dumbbell-shrug",
+            "sets": "3",
+            "reps": "15"
+        }
+    ]
+}

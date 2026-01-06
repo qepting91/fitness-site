@@ -1,0 +1,39 @@
+{
+    "name": "Option B: Safe Gains",
+    "path": "optional",
+    "dayOfWeek": "tuesday,saturday",
+    "description": "Machine Hypertrophy - Focus on Arms & Shoulders using Machines. Better for nerve/joint pain.",
+    "structure": "straight sets",
+    "restBetweenSets": "60 seconds",
+    "exercises": [
+        {
+            "slug": "preacher-curl",
+            "sets": "3",
+            "reps": "12",
+            "notes": "Machine preacher curl"
+        },
+        {
+            "slug": "reverse-grip-triceps-pushdown",
+            "sets": "3",
+            "reps": "15",
+            "notes": "Rope attachment"
+        },
+        {
+            "slug": "high-cable-curls",
+            "sets": "3",
+            "reps": "12",
+            "notes": "Straight bar"
+        },
+        {
+            "slug": "cable-one-arm-tricep-extension",
+            "sets": "3",
+            "reps": "12",
+            "notes": "Seated machine"
+        },
+        {
+            "slug": "cable-seated-lateral-raise",
+            "sets": "3",
+            "reps": "15"
+        }
+    ]
+}

@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ExerciseAccordion from '../../components/ExerciseAccordion.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const workouts = await getCollection('workouts');
+  return workouts.map(workout => ({
+    params: { workout: workout.id },
+    props: { workout },
+  }));
+}
+
+const { workout } = Astro.props;
+const exercises = await getCollection('exercises');
+
+// Map workout exercises to exercise data
+const exerciseList = workout.data.exercises.map(ex => {
+  const exerciseData = exercises.find(e => e.id === ex.slug);
+  return {
+    ...ex,
+    exercise: exerciseData?.data || {
+      id: ex.slug,
+      name: ex.slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      primaryMuscles: [],
+      category: 'strength',
+      equipment: 'N/A',
+      images: [],
+      instructions: [],
+    },
+  };
+});
+
+// Path color mapping
+const pathColors = {
+  hybrid: { bg: 'bg-violet-500/20', text: 'text-violet-400', border: 'border-violet-500/30' },
+  machine: { bg: 'bg-sky-500/20', text: 'text-sky-400', border: 'border-sky-500/30' },
+  optional: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', border: 'border-emerald-500/30' },
+  core: { bg: 'bg-amber-500/20', text: 'text-amber-400', border: 'border-amber-500/30' },
+};
+
+const colors = pathColors[workout.data.path] || pathColors.hybrid;
+---
+
+<BaseLayout title={workout.data.name}>
+  <!-- Back button -->
+  <a href="/" class="inline-flex items-center gap-1 text-slate-400 hover:text-slate-200 mb-4 min-h-[44px]">
+    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+    <span>Back</span>
+  </a>
+
+  <!-- Header -->
+  <header class="mb-6">
+    <div class="flex items-center gap-2 mb-2">
+      <span class={`badge ${colors.bg} ${colors.text} border ${colors.border}`}>
+        {workout.data.path.charAt(0).toUpperCase() + workout.data.path.slice(1)}
+      </span>
+      {workout.data.dayOfWeek && (
+        <span class="text-slate-500 text-sm capitalize">{workout.data.dayOfWeek}</span>
+      )}
+    </div>
+    <h1 class="text-xl font-bold text-slate-100">{workout.data.name}</h1>
+    {workout.data.description && (
+      <p class="text-slate-400 text-sm mt-1">{workout.data.description}</p>
+    )}
+  </header>
+
+  <!-- Workout Info -->
+  <div class="flex flex-wrap gap-2 mb-6">
+    {workout.data.structure && (
+      <span class="badge bg-slate-800/80 text-slate-300 border border-slate-700/50">
+        {workout.data.structure}
+      </span>
+    )}
+    {workout.data.restBetweenSets && (
+      <span class="badge bg-slate-800/80 text-slate-300 border border-slate-700/50">
+        ⏱️ Rest: {workout.data.restBetweenSets}
+      </span>
+    )}
+    {workout.data.rounds && (
+      <span class="badge bg-slate-800/80 text-slate-300 border border-slate-700/50">
+        🔄 {workout.data.rounds} rounds
+      </span>
+    )}
+  </div>
+
+  <!-- Exercises -->
+  <section>
+    <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+      Exercises ({exerciseList.length})
+    </h2>
+    <div class="space-y-3">
+      {exerciseList.map(item => (
+        <ExerciseAccordion
+          exercise={item.exercise}
+          sets={item.sets}
+          reps={item.reps}
+          notes={item.notes}
+          supersetGroup={item.supersetGroup}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

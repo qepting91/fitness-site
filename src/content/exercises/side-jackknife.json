@@ -1,0 +1,18 @@
+{
+  "id": "Side_Jackknife",
+  "name": "Side Jackknife",
+  "force": "pull",
+  "level": "beginner",
+  "mechanic": "compound",
+  "equipment": "body only",
+  "primaryMuscles": [
+    "abdominals"
+  ],
+  "secondaryMuscles": [],
+  "instructions": [],
+  "category": "strength",
+  "images": [
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Jackknife/0.jpg",
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Jackknife/1.jpg"
+  ]
+}

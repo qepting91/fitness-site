@@ -1,0 +1,22 @@
+{
+  "id": "Shoulder_Raise",
+  "name": "Shoulder Raise",
+  "force": "pull",
+  "level": "beginner",
+  "mechanic": null,
+  "equipment": null,
+  "primaryMuscles": [
+    "shoulders"
+  ],
+  "secondaryMuscles": [
+    "lats"
+  ],
+  "instructions": [
+    "Relax your arms to your sides and raise your shoulders up toward your ears, then back down."
+  ],
+  "category": "stretching",
+  "images": [
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Shoulder_Raise/0.jpg",
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Shoulder_Raise/1.jpg"
+  ]
+}

@@ -1,0 +1,96 @@
+---
+interface Props {
+  exercise: {
+    id: string;
+    name: string;
+    primaryMuscles: string[];
+    equipment: string;
+    images: string[];
+    instructions: string[];
+    level?: string;
+  };
+  sets: string;
+  reps: string;
+  notes?: string;
+  supersetGroup?: string;
+}
+
+const { exercise, sets, reps, notes, supersetGroup } = Astro.props;
+---
+
+<details class="exercise-details group">
+  <summary class="pr-2">
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-2 mb-1">
+        {supersetGroup && (
+          <span class="badge badge-superset">{supersetGroup}</span>
+        )}
+        <h3 class="font-semibold text-slate-100 truncate">{exercise.name}</h3>
+      </div>
+      <div class="flex items-center gap-3 text-sm">
+        <span class="text-slate-400">{sets} × {reps}</span>
+        <div class="flex gap-1">
+          {exercise.primaryMuscles.map(m => (
+            <span class="badge badge-muscle">{m}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+    <svg class="chevron w-5 h-5 text-slate-500 transition-transform duration-200 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </summary>
+  
+  <div class="p-4 space-y-4">
+    <!-- Exercise Images -->
+    {exercise.images && exercise.images.length > 0 && (
+      <div class={`grid gap-4 ${exercise.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+        {exercise.images.map((img, index) => (
+          <div class="relative aspect-video bg-slate-800 rounded-lg overflow-hidden">
+            <img 
+              src={img} 
+              alt={`${exercise.name} demonstration ${index + 1}`}
+              class="w-full h-full object-contain"
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+    )}
+    
+    <!-- Equipment & Notes -->
+    <div class="flex flex-wrap gap-2">
+      <span class="badge badge-equipment">{exercise.equipment}</span>
+      
+      {/* Level Badge */}
+      <span class={`badge ${
+        exercise.level === 'beginner' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
+        exercise.level === 'intermediate' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
+        'bg-rose-500/20 text-rose-400 border-rose-500/30'
+      } border`}>
+        {exercise.level || 'Beginner'}
+      </span>
+
+      {notes && (
+        <span class="text-sm text-amber-400 italic">💡 {notes}</span>
+      )}
+    </div>
+    
+    <!-- Instructions -->
+    {exercise.instructions.length > 0 && (
+      <div class="space-y-2">
+        <h4 class="text-sm font-semibold text-slate-300 uppercase tracking-wide">Instructions</h4>
+        <ol class="space-y-2 text-sm text-slate-400">
+          {exercise.instructions.map((step, i) => (
+            <li class="flex gap-3">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-violet-500/20 text-violet-400 text-xs flex items-center justify-center font-medium">
+                {i + 1}
+              </span>
+              <span class="pt-0.5">{step}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    )}
+  </div>
+</details>

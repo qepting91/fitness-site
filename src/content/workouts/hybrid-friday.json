@@ -1,0 +1,47 @@
+{
+    "name": "Hybrid Friday: Lower Body Supersets",
+    "path": "hybrid",
+    "dayOfWeek": "friday",
+    "description": "Lower body focus with supersets. Perform A & B exercises back-to-back, rest 90 seconds.",
+    "structure": "supersets",
+    "restBetweenSets": "90 seconds",
+    "exercises": [
+        {
+            "slug": "leg-press",
+            "sets": "3",
+            "reps": "10-12",
+            "supersetGroup": "1A"
+        },
+        {
+            "slug": "seated-leg-curl",
+            "sets": "3",
+            "reps": "12-15",
+            "supersetGroup": "1B"
+        },
+        {
+            "slug": "goblet-squat",
+            "sets": "3",
+            "reps": "12",
+            "supersetGroup": "2A"
+        },
+        {
+            "slug": "seated-calf-raise",
+            "sets": "3",
+            "reps": "15",
+            "supersetGroup": "2B"
+        },
+        {
+            "slug": "leg-extensions",
+            "sets": "3",
+            "reps": "15",
+            "supersetGroup": "3A"
+        },
+        {
+            "slug": "romanian-deadlift",
+            "sets": "3",
+            "reps": "10-12",
+            "supersetGroup": "3B",
+            "notes": "Hinge at hips, stop at shin"
+        }
+    ]
+}

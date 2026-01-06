@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WorkoutCard from '../components/WorkoutCard.astro';
+import { getCollection } from 'astro:content';
+
+const workouts = await getCollection('workouts');
+
+// Group workouts by path type
+const hybridWorkouts = workouts.filter(w => w.data.path === 'hybrid');
+const machineWorkouts = workouts.filter(w => w.data.path === 'machine');
+const optionalWorkouts = workouts.filter(w => w.data.path === 'optional');
+const coreWorkout = workouts.find(w => w.data.path === 'core');
+
+// Schedule data
+const schedule = [
+  { day: 'Monday', workout: 'Full Body', type: 'mandatory' },
+  { day: 'Tuesday', workout: 'Core + Optional', type: 'optional' },
+  { day: 'Wednesday', workout: 'Rest', type: 'rest' },
+  { day: 'Thursday', workout: 'Upper Body', type: 'mandatory' },
+  { day: 'Friday', workout: 'Lower Body', type: 'mandatory' },
+  { day: 'Saturday', workout: 'Core + Optional', type: 'optional' },
+  { day: 'Sunday', workout: 'Rest', type: 'rest' },
+];
+---
+
+<BaseLayout title="Home">
+  <!-- Hero Section -->
+  <section class="relative py-12 px-4 mb-8 -mx-4 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-violet-900/40 via-slate-900 to-slate-900 z-0"></div>
+    <div class="absolute -top-24 -right-24 w-64 h-64 bg-violet-600/30 rounded-full blur-3xl"></div>
+    <div class="relative z-10 text-center">
+      <h1 class="text-4xl font-extrabold tracking-tight text-white mb-2">
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400">FitRef</span>
+      </h1>
+      <p class="text-slate-400 text-lg mb-6 max-w-xs mx-auto">Your personal, data-driven workout companion.</p>
+      
+      <div class="flex justify-center gap-3">
+        <a href="/search" class="px-6 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-medium rounded-full transition-all shadow-lg shadow-violet-500/25">
+          Find Exercises
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Weekly Schedule -->
+  <section class="mb-10">
+    <div class="flex items-center justify-between mb-4 px-1">
+      <h2 class="text-lg font-bold text-slate-100">Your Week</h2>
+      <span class="text-xs font-medium text-slate-500 bg-slate-800/50 px-2 py-1 rounded-md">
+        {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
+      </span>
+    </div>
+    <div class="grid grid-cols-7 gap-1.5 text-center">
+      {schedule.map((s, i) => {
+        const isToday = new Date().getDay() === (i + 1) % 7;
+        return (
+          <div class={`flex flex-col items-center justify-center py-3 rounded-xl border transition-all ${
+            isToday 
+              ? 'bg-gradient-to-b from-violet-500/20 to-violet-600/10 border-violet-500/50 shadow-sm shadow-violet-500/10' 
+              : 'bg-slate-800/40 border-slate-800'
+          }`}>
+            <span class={`text-[10px] uppercase font-bold tracking-wider mb-1 ${isToday ? 'text-violet-300' : 'text-slate-500'}`}>
+              {s.day.slice(0, 3)}
+            </span>
+            <span class={`text-lg leading-none ${
+              s.type === 'rest' ? 'opacity-50 grayscale' : ''
+            }`}>
+              {s.type === 'rest' ? '💤' : s.type === 'mandatory' ? '🔥' : '✨'}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Workout Plans -->
+  <div class="space-y-8">
+    
+    <!-- Path 1: Hybrid -->
+    <section>
+      <div class="flex items-center justify-between mb-3 px-1">
+        <div>
+          <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+            Hybrid Path
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-violet-500/20 text-violet-300 border border-violet-500/30 uppercase tracking-wide">Primary</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">Free weights & cables for max hypertrophy</p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        {hybridWorkouts.map(workout => (
+          <WorkoutCard 
+            title={workout.data.name}
+            subtitle={workout.data.description}
+            href={`/workouts/${workout.id}`}
+            exerciseCount={workout.data.exercises.length}
+          />
+        ))}
+      </div>
+    </section>
+
+    <!-- Path 2: Machine -->
+    <section>
+      <div class="flex items-center justify-between mb-3 px-1">
+        <div>
+          <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
+            Machine Path
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 uppercase tracking-wide">Stable</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">Machine-focused for controlled tension</p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        {machineWorkouts.map(workout => (
+          <WorkoutCard 
+            title={workout.data.name}
+            subtitle={workout.data.description}
+            href={`/workouts/${workout.id}`}
+            badgeColor="sky"
+            exerciseCount={workout.data.exercises.length}
+          />
+        ))}
+      </div>
+    </section>
+
+    <!-- Optional -->
+    <section>
+      <div class="flex items-center justify-between mb-3 px-1">
+        <div>
+           <h2 class="text-lg font-bold text-slate-100">Optional Days</h2>
+           <p class="text-xs text-slate-400 mt-0.5">Tuesday & Saturday choices</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 gap-3">
+        {optionalWorkouts.map(workout => (
+          <WorkoutCard 
+            title={workout.data.name}
+            subtitle={workout.data.description}
+            href={`/workouts/${workout.id}`}
+            badgeColor="emerald"
+            exerciseCount={workout.data.exercises.length}
+          />
+        ))}
+        {coreWorkout && (
+          <WorkoutCard 
+            title={coreWorkout.data.name}
+            subtitle={coreWorkout.data.description}
+            href={`/workouts/${coreWorkout.id}`}
+            badge="Home"
+            badgeColor="amber"
+            exerciseCount={coreWorkout.data.exercises.length}
+          />
+        )}
+      </div>
+    </section>
+  </div>
