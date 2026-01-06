@@ -1,0 +1,9 @@
+{
+  "name": "Lateral Elliptical",
+  "category": "cardio",
+  "brand": "Octane Fitness",
+  "notes": "LateralX model",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["elliptical", "cardio", "lateral"],
+  "available": true
+}

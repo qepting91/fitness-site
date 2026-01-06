@@ -1,0 +1,8 @@
+{
+  "name": "Medicine Balls",
+  "category": "functional-accessory",
+  "notes": "With vertical rack",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["medicine ball", "med ball", "slam ball"],
+  "available": true
+}

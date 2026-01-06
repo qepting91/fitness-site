@@ -1,0 +1,7 @@
+{
+  "name": "Recumbent Bike",
+  "category": "cardio",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["bike", "cardio", "recumbent"],
+  "available": true
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Cable Machine",
+  "category": "strength-pin-loaded",
+  "brand": "Star Trac",
+  "notes": "Single station",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["cable", "cables"],
+  "available": true
+}

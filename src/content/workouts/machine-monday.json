@@ -1,39 +1,45 @@
 {
-    "name": "Machine Monday: Full Body Control",
-    "path": "machine",
-    "dayOfWeek": "monday",
-    "description": "Full body using machines only. Complete all sets of one machine before moving to the next. Rest 60s between sets.",
-    "structure": "straight sets",
-    "restBetweenSets": "60 seconds",
-    "exercises": [
-        {
-            "slug": "leg-press",
-            "sets": "3",
-            "reps": "15",
-            "notes": "Light/Smooth"
-        },
-        {
-            "slug": "cable-chest-press",
-            "sets": "3",
-            "reps": "12",
-            "notes": "Seat high, handles at nipple line"
-        },
-        {
-            "slug": "seated-cable-rows",
-            "sets": "3",
-            "reps": "12",
-            "notes": "Chest pad supported"
-        },
-        {
-            "slug": "machine-shoulder-military-press",
-            "sets": "3",
-            "reps": "10",
-            "notes": "Neutral/Parallel grip"
-        },
-        {
-            "slug": "ab-crunch-machine",
-            "sets": "3",
-            "reps": "15"
-        }
-    ]
+  "name": "Machine Monday: Full Body Control",
+  "path": "machine",
+  "dayOfWeek": "monday",
+  "scheduledDays": ["monday"],
+  "description": "Full body using machines only. Complete all sets of one machine before moving to the next. Rest 60s between sets.",
+  "structure": "straight-sets",
+  "restBetweenSets": "60 seconds",
+  "difficulty": "beginner",
+  "estimatedDuration": 40,
+  "primaryMuscleGroups": ["legs", "chest", "back", "shoulders", "core"],
+  "equipmentRequired": ["machines", "cables"],
+  "tags": ["full-body", "machines", "beginner-friendly", "joint-safe"],
+  "exercises": [
+    {
+      "slug": "leg-press",
+      "sets": "3",
+      "reps": "15",
+      "notes": "Light/Smooth"
+    },
+    {
+      "slug": "cable-chest-press",
+      "sets": "3",
+      "reps": "12",
+      "notes": "Seat high, handles at nipple line"
+    },
+    {
+      "slug": "seated-cable-rows",
+      "sets": "3",
+      "reps": "12",
+      "notes": "Chest pad supported"
+    },
+    {
+      "slug": "machine-shoulder-military-press",
+      "sets": "3",
+      "reps": "10",
+      "notes": "Neutral/Parallel grip"
+    },
+    {
+      "slug": "ab-crunch-machine",
+      "sets": "3",
+      "reps": "15"
+    }
+  ]
 }

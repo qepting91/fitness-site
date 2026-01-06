@@ -1,45 +1,51 @@
 {
-    "name": "Machine Thursday: Upper Body Machines",
-    "path": "machine",
-    "dayOfWeek": "thursday",
-    "description": "Upper body using machines for stability and safety.",
-    "structure": "straight sets",
-    "restBetweenSets": "60 seconds",
-    "exercises": [
-        {
-            "slug": "barbell-incline-bench-press-medium-grip",
-            "sets": "4",
-            "reps": "12",
-            "notes": "Machine incline press"
-        },
-        {
-            "slug": "close-grip-front-lat-pulldown",
-            "sets": "4",
-            "reps": "12",
-            "notes": "Thumbless grip"
-        },
-        {
-            "slug": "supine-chest-throw",
-            "sets": "3",
-            "reps": "15",
-            "notes": "Pec Deck Fly"
-        },
-        {
-            "slug": "reverse-flyes",
-            "sets": "3",
-            "reps": "15",
-            "notes": "Crucial for posture"
-        },
-        {
-            "slug": "machine-bicep-curl",
-            "sets": "3",
-            "reps": "12"
-        },
-        {
-            "slug": "reverse-grip-triceps-pushdown",
-            "sets": "3",
-            "reps": "15",
-            "notes": "Cable pushdown"
-        }
-    ]
+  "name": "Machine Thursday: Upper Body Machines",
+  "path": "machine",
+  "dayOfWeek": "thursday",
+  "scheduledDays": ["thursday"],
+  "description": "Upper body using machines for stability and safety.",
+  "structure": "straight-sets",
+  "restBetweenSets": "60 seconds",
+  "difficulty": "beginner",
+  "estimatedDuration": 45,
+  "primaryMuscleGroups": ["chest", "back", "arms"],
+  "equipmentRequired": ["machines", "cables"],
+  "tags": ["upper-body", "machines", "beginner-friendly", "joint-safe"],
+  "exercises": [
+    {
+      "slug": "barbell-incline-bench-press-medium-grip",
+      "sets": "4",
+      "reps": "12",
+      "notes": "Machine incline press"
+    },
+    {
+      "slug": "close-grip-front-lat-pulldown",
+      "sets": "4",
+      "reps": "12",
+      "notes": "Thumbless grip"
+    },
+    {
+      "slug": "supine-chest-throw",
+      "sets": "3",
+      "reps": "15",
+      "notes": "Pec Deck Fly"
+    },
+    {
+      "slug": "reverse-flyes",
+      "sets": "3",
+      "reps": "15",
+      "notes": "Crucial for posture"
+    },
+    {
+      "slug": "machine-bicep-curl",
+      "sets": "3",
+      "reps": "12"
+    },
+    {
+      "slug": "reverse-grip-triceps-pushdown",
+      "sets": "3",
+      "reps": "15",
+      "notes": "Cable pushdown"
+    }
+  ]
 }

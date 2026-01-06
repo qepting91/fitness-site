@@ -5,7 +5,9 @@ import { getCollection, getEntry } from 'astro:content';
 
 export async function getStaticPaths() {
   const workouts = await getCollection('workouts');
-  return workouts.map(workout => ({
+  // Filter out template files
+  const validWorkouts = workouts.filter(w => !w.id.startsWith('_'));
+  return validWorkouts.map(workout => ({
     params: { workout: workout.id },
     props: { workout },
   }));
@@ -21,7 +23,7 @@ const exerciseList = workout.data.exercises.map(ex => {
     ...ex,
     exercise: exerciseData?.data || {
       id: ex.slug,
-      name: ex.slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      name: ex.slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
       primaryMuscles: [],
       category: 'strength',
       equipment: 'N/A',
@@ -30,6 +32,37 @@ const exerciseList = workout.data.exercises.map(ex => {
     },
   };
 });
+
+// Group exercises by superset
+const groupedExercises: { group: string | null; exercises: typeof exerciseList }[] = [];
+let currentGroup: string | null = null;
+let currentExercises: typeof exerciseList = [];
+
+exerciseList.forEach((ex, index) => {
+  const group = ex.supersetGroup?.replace(/[0-9]/g, '') || null;
+
+  if (ex.supersetGroup) {
+    if (currentGroup !== group) {
+      if (currentExercises.length > 0) {
+        groupedExercises.push({ group: currentGroup, exercises: currentExercises });
+      }
+      currentGroup = group;
+      currentExercises = [ex];
+    } else {
+      currentExercises.push(ex);
+    }
+  } else {
+    if (currentExercises.length > 0) {
+      groupedExercises.push({ group: currentGroup, exercises: currentExercises });
+      currentExercises = [];
+      currentGroup = null;
+    }
+    groupedExercises.push({ group: null, exercises: [ex] });
+  }
+});
+if (currentExercises.length > 0) {
+  groupedExercises.push({ group: currentGroup, exercises: currentExercises });
+}
 
 // Path color mapping
 const pathColors = {
@@ -40,67 +73,166 @@ const pathColors = {
 };
 
 const colors = pathColors[workout.data.path] || pathColors.hybrid;
+
+// Difficulty colors
+const difficultyColors = {
+  beginner: 'bg-emerald-500/20 text-emerald-400',
+  intermediate: 'bg-amber-500/20 text-amber-400',
+  advanced: 'bg-rose-500/20 text-rose-400',
+};
+
+// Get unique equipment from exercises
+const usedEquipment = [...new Set(exerciseList.map(ex => ex.exercise.equipment).filter(Boolean))];
 ---
 
 <BaseLayout title={workout.data.name}>
   <!-- Back button -->
-  <a href="/" class="inline-flex items-center gap-1 text-slate-400 hover:text-slate-200 mb-4 min-h-[44px]">
+  <a href="/workouts" class="inline-flex items-center gap-1 text-slate-400 hover:text-slate-200 mb-4 min-h-[44px]">
     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
     </svg>
-    <span>Back</span>
+    <span>Back to Workouts</span>
   </a>
 
   <!-- Header -->
   <header class="mb-6">
-    <div class="flex items-center gap-2 mb-2">
+    <div class="flex items-center gap-2 mb-2 flex-wrap">
       <span class={`badge ${colors.bg} ${colors.text} border ${colors.border}`}>
         {workout.data.path.charAt(0).toUpperCase() + workout.data.path.slice(1)}
       </span>
-      {workout.data.dayOfWeek && (
-        <span class="text-slate-500 text-sm capitalize">{workout.data.dayOfWeek}</span>
+      {workout.data.difficulty && (
+        <span class={`badge ${difficultyColors[workout.data.difficulty]}`}>
+          {workout.data.difficulty.charAt(0).toUpperCase() + workout.data.difficulty.slice(1)}
+        </span>
+      )}
+      {workout.data.scheduledDays && workout.data.scheduledDays.length > 0 && (
+        <span class="text-xs text-slate-500 capitalize">
+          {workout.data.scheduledDays.map((d: string) => d.slice(0, 3)).join(', ')}
+        </span>
       )}
     </div>
     <h1 class="text-xl font-bold text-slate-100">{workout.data.name}</h1>
     {workout.data.description && (
-      <p class="text-slate-400 text-sm mt-1">{workout.data.description}</p>
+      <p class="text-slate-400 text-sm mt-2">{workout.data.description}</p>
     )}
   </header>
 
-  <!-- Workout Info -->
+  <!-- Quick Stats -->
+  <div class="grid grid-cols-3 gap-3 mb-6">
+    <div class="card p-3 text-center">
+      <p class="text-lg font-bold text-slate-100">{exerciseList.length}</p>
+      <p class="text-xs text-slate-500">Exercises</p>
+    </div>
+    {workout.data.estimatedDuration && (
+      <div class="card p-3 text-center">
+        <p class="text-lg font-bold text-slate-100">{workout.data.estimatedDuration}</p>
+        <p class="text-xs text-slate-500">Minutes</p>
+      </div>
+    )}
+    {workout.data.rounds && (
+      <div class="card p-3 text-center">
+        <p class="text-lg font-bold text-slate-100">{workout.data.rounds}</p>
+        <p class="text-xs text-slate-500">Rounds</p>
+      </div>
+    )}
+    {!workout.data.rounds && !workout.data.estimatedDuration && (
+      <div class="card p-3 text-center col-span-2">
+        <p class="text-sm text-slate-400 capitalize">{workout.data.structure?.replace('-', ' ') || 'Standard'}</p>
+        <p class="text-xs text-slate-500">Format</p>
+      </div>
+    )}
+  </div>
+
+  <!-- Workout Info Pills -->
   <div class="flex flex-wrap gap-2 mb-6">
     {workout.data.structure && (
-      <span class="badge bg-slate-800/80 text-slate-300 border border-slate-700/50">
-        {workout.data.structure}
+      <span class="badge bg-slate-800/80 text-slate-300 border border-slate-700/50 capitalize">
+        {workout.data.structure.replace('-', ' ')}
       </span>
     )}
     {workout.data.restBetweenSets && (
       <span class="badge bg-slate-800/80 text-slate-300 border border-slate-700/50">
-        ⏱️ Rest: {workout.data.restBetweenSets}
-      </span>
-    )}
-    {workout.data.rounds && (
-      <span class="badge bg-slate-800/80 text-slate-300 border border-slate-700/50">
-        🔄 {workout.data.rounds} rounds
+        Rest: {workout.data.restBetweenSets}
       </span>
     )}
   </div>
+
+  <!-- Equipment Required -->
+  {usedEquipment.length > 0 && (
+    <section class="mb-6">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Equipment Needed</h2>
+      <div class="flex flex-wrap gap-2">
+        {usedEquipment.map(eq => (
+          <span class="badge badge-equipment">{eq}</span>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Muscle Groups -->
+  {workout.data.primaryMuscleGroups && workout.data.primaryMuscleGroups.length > 0 && (
+    <section class="mb-6">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Target Muscles</h2>
+      <div class="flex flex-wrap gap-2">
+        {workout.data.primaryMuscleGroups.map((muscle: string) => (
+          <span class="badge badge-muscle capitalize">{muscle.replace('-', ' ')}</span>
+        ))}
+      </div>
+    </section>
+  )}
 
   <!-- Exercises -->
   <section>
     <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
       Exercises ({exerciseList.length})
     </h2>
-    <div class="space-y-3">
-      {exerciseList.map(item => (
-        <ExerciseAccordion
-          exercise={item.exercise}
-          sets={item.sets}
-          reps={item.reps}
-          notes={item.notes}
-          supersetGroup={item.supersetGroup}
-        />
+
+    <div class="space-y-4">
+      {groupedExercises.map(({ group, exercises: groupExercises }, groupIndex) => (
+        <div class={group ? 'superset-group' : ''}>
+          {group && (
+            <div class="superset-label text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+              <span class="w-5 h-5 rounded bg-amber-500/20 flex items-center justify-center">{groupIndex + 1}</span>
+              Superset
+            </div>
+          )}
+          <div class={`space-y-2 ${group ? 'pl-3 border-l-2 border-amber-500/30' : ''}`}>
+            {groupExercises.map(item => (
+              <ExerciseAccordion
+                exercise={item.exercise}
+                sets={item.sets}
+                reps={item.reps}
+                notes={item.notes}
+                supersetGroup={item.supersetGroup}
+                tempo={item.tempo}
+                restAfter={item.restAfter}
+              />
+            ))}
+          </div>
+        </div>
       ))}
     </div>
   </section>
+
+  <!-- Tags -->
+  {workout.data.tags && workout.data.tags.length > 0 && (
+    <section class="mt-8 pt-6 border-t border-slate-800">
+      <div class="flex flex-wrap gap-2">
+        {workout.data.tags.map((tag: string) => (
+          <span class="text-xs px-2 py-1 rounded-full bg-slate-800/50 text-slate-500">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    </section>
+  )}
 </BaseLayout>
+
+<style>
+  .superset-group {
+    padding: 0.75rem;
+    background: rgba(245, 158, 11, 0.05);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(245, 158, 11, 0.1);
+  }
+</style>

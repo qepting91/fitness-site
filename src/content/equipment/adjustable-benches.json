@@ -1,0 +1,8 @@
+{
+  "name": "Adjustable Benches",
+  "category": "strength-free-weights",
+  "notes": "Multiple available",
+  "quantity": 3,
+  "exerciseEquipmentTags": ["bench", "adjustable bench", "incline bench", "flat bench"],
+  "available": true
+}

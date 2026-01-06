@@ -1,39 +1,45 @@
 {
-    "name": "Hybrid Monday: Grit Circuit",
-    "path": "hybrid",
-    "dayOfWeek": "monday",
-    "description": "Full-body circuit using dumbbells and cables. Perform exercises 1-5 back-to-back, rest 2 minutes, repeat for 4 rounds.",
-    "structure": "circuit",
-    "restBetweenSets": "2 minutes between rounds",
-    "rounds": 4,
-    "exercises": [
-        {
-            "slug": "dumbbell-squat",
-            "sets": "4",
-            "reps": "12",
-            "notes": "Wide stance, DB between legs"
-        },
-        {
-            "slug": "dumbbell-bench-press",
-            "sets": "4",
-            "reps": "12"
-        },
-        {
-            "slug": "face-pull",
-            "sets": "4",
-            "reps": "15",
-            "notes": "Or Rear Delt Flys"
-        },
-        {
-            "slug": "cable-seated-lateral-raise",
-            "sets": "4",
-            "reps": "15"
-        },
-        {
-            "slug": "bent-arm-dumbbell-pullover",
-            "sets": "4",
-            "reps": "12",
-            "notes": "Lying on bench"
-        }
-    ]
+  "name": "Hybrid Monday: Grit Circuit",
+  "path": "hybrid",
+  "dayOfWeek": "monday",
+  "scheduledDays": ["monday"],
+  "description": "Full-body circuit using dumbbells and cables. Perform exercises 1-5 back-to-back, rest 2 minutes, repeat for 4 rounds.",
+  "structure": "circuit",
+  "restBetweenSets": "2 minutes between rounds",
+  "rounds": 4,
+  "difficulty": "intermediate",
+  "estimatedDuration": 45,
+  "primaryMuscleGroups": ["legs", "chest", "shoulders", "back"],
+  "equipmentRequired": ["dumbbells", "cables", "bench"],
+  "tags": ["full-body", "circuit", "conditioning", "hypertrophy"],
+  "exercises": [
+    {
+      "slug": "dumbbell-squat",
+      "sets": "4",
+      "reps": "12",
+      "notes": "Wide stance, DB between legs"
+    },
+    {
+      "slug": "dumbbell-bench-press",
+      "sets": "4",
+      "reps": "12"
+    },
+    {
+      "slug": "face-pull",
+      "sets": "4",
+      "reps": "15",
+      "notes": "Or Rear Delt Flys"
+    },
+    {
+      "slug": "cable-seated-lateral-raise",
+      "sets": "4",
+      "reps": "15"
+    },
+    {
+      "slug": "bent-arm-dumbbell-pullover",
+      "sets": "4",
+      "reps": "12",
+      "notes": "Lying on bench"
+    }
+  ]
 }

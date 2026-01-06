@@ -5,152 +5,203 @@ import { getCollection } from 'astro:content';
 
 const workouts = await getCollection('workouts');
 
-// Group workouts by path type
-const hybridWorkouts = workouts.filter(w => w.data.path === 'hybrid');
-const machineWorkouts = workouts.filter(w => w.data.path === 'machine');
-const optionalWorkouts = workouts.filter(w => w.data.path === 'optional');
-const coreWorkout = workouts.find(w => w.data.path === 'core');
+// Filter out template file
+const allWorkouts = workouts.filter(w => !w.id.startsWith('_'));
 
-// Schedule data
+// Get current day info
+const today = new Date();
+const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+const currentDay = dayNames[today.getDay()];
+const currentDayLabel = today.toLocaleDateString('en-US', { weekday: 'long' });
+
+// Find today's workouts
+const todaysWorkouts = allWorkouts.filter(w =>
+  w.data.scheduledDays?.includes(currentDay as any) ||
+  w.data.dayOfWeek?.toLowerCase().includes(currentDay)
+);
+
+// Check if today is a rest day
+const isRestDay = currentDay === 'wednesday' || currentDay === 'sunday';
+
+// Group workouts by path for quick access
+const hybridWorkouts = allWorkouts.filter(w => w.data.path === 'hybrid');
+const machineWorkouts = allWorkouts.filter(w => w.data.path === 'machine');
+
+// Get path badge color
+const getPathColor = (path: string) => {
+  const colors: Record<string, 'violet' | 'sky' | 'emerald' | 'amber'> = {
+    hybrid: 'violet',
+    machine: 'sky',
+    optional: 'emerald',
+    core: 'amber'
+  };
+  return colors[path] || 'violet';
+};
+
+// Schedule data with workout references
 const schedule = [
-  { day: 'Monday', workout: 'Full Body', type: 'mandatory' },
-  { day: 'Tuesday', workout: 'Core + Optional', type: 'optional' },
-  { day: 'Wednesday', workout: 'Rest', type: 'rest' },
-  { day: 'Thursday', workout: 'Upper Body', type: 'mandatory' },
-  { day: 'Friday', workout: 'Lower Body', type: 'mandatory' },
-  { day: 'Saturday', workout: 'Core + Optional', type: 'optional' },
-  { day: 'Sunday', workout: 'Rest', type: 'rest' },
+  { day: 'Mon', full: 'monday', type: 'training', focus: 'Full Body' },
+  { day: 'Tue', full: 'tuesday', type: 'optional', focus: 'Arms + Core' },
+  { day: 'Wed', full: 'wednesday', type: 'rest', focus: 'Rest' },
+  { day: 'Thu', full: 'thursday', type: 'training', focus: 'Upper Body' },
+  { day: 'Fri', full: 'friday', type: 'training', focus: 'Lower Body' },
+  { day: 'Sat', full: 'saturday', type: 'optional', focus: 'Arms + Core' },
+  { day: 'Sun', full: 'sunday', type: 'rest', focus: 'Rest' },
 ];
 ---
 
 <BaseLayout title="Home">
-  <!-- Hero Section -->
-  <section class="relative py-12 px-4 mb-8 -mx-4 overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-violet-900/40 via-slate-900 to-slate-900 z-0"></div>
-    <div class="absolute -top-24 -right-24 w-64 h-64 bg-violet-600/30 rounded-full blur-3xl"></div>
-    <div class="relative z-10 text-center">
-      <h1 class="text-4xl font-extrabold tracking-tight text-white mb-2">
-        <span class="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400">FitRef</span>
-      </h1>
-      <p class="text-slate-400 text-lg mb-6 max-w-xs mx-auto">Your personal, data-driven workout companion.</p>
-      
-      <div class="flex justify-center gap-3">
-        <a href="/search" class="px-6 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-medium rounded-full transition-all shadow-lg shadow-violet-500/25">
-          Find Exercises
-        </a>
+  <!-- Today's Section -->
+  <section class="mb-8">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <p class="text-xs text-slate-500 uppercase tracking-wider font-medium">Today</p>
+        <h1 class="text-2xl font-bold text-slate-100">{currentDayLabel}</h1>
       </div>
+      <a href="/workouts" class="text-sm text-violet-400 hover:text-violet-300 flex items-center gap-1">
+        All Workouts
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
     </div>
+
+    {isRestDay ? (
+      <div class="card p-6 text-center">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-800/50 flex items-center justify-center">
+          <span class="text-3xl">😴</span>
+        </div>
+        <h2 class="text-lg font-semibold text-slate-200 mb-1">Rest Day</h2>
+        <p class="text-sm text-slate-400">Take it easy and recover. Your muscles grow during rest!</p>
+        <div class="mt-4 pt-4 border-t border-slate-800">
+          <p class="text-xs text-slate-500 mb-2">Want to stay active?</p>
+          <a href="/workouts/core" class="text-sm text-amber-400 hover:text-amber-300">Try the Home Core Routine →</a>
+        </div>
+      </div>
+    ) : (
+      <div class="space-y-3">
+        {todaysWorkouts.length > 0 ? (
+          todaysWorkouts.map(workout => (
+            <WorkoutCard
+              title={workout.data.name}
+              subtitle={workout.data.description}
+              href={`/workouts/${workout.id}`}
+              badgeColor={getPathColor(workout.data.path)}
+              exerciseCount={workout.data.exercises.length}
+              difficulty={workout.data.difficulty}
+              duration={workout.data.estimatedDuration}
+              muscleGroups={workout.data.primaryMuscleGroups}
+              structure={workout.data.structure}
+              isToday={true}
+            />
+          ))
+        ) : (
+          <div class="card p-6 text-center">
+            <p class="text-slate-400">No scheduled workouts for today</p>
+          </div>
+        )}
+      </div>
+    )}
   </section>
 
-  <!-- Weekly Schedule -->
-  <section class="mb-10">
-    <div class="flex items-center justify-between mb-4 px-1">
-      <h2 class="text-lg font-bold text-slate-100">Your Week</h2>
-      <span class="text-xs font-medium text-slate-500 bg-slate-800/50 px-2 py-1 rounded-md">
-        {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
-      </span>
-    </div>
-    <div class="grid grid-cols-7 gap-1.5 text-center">
+  <!-- Week Overview -->
+  <section class="mb-8">
+    <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">This Week</h2>
+    <div class="grid grid-cols-7 gap-1">
       {schedule.map((s, i) => {
-        const isToday = new Date().getDay() === (i + 1) % 7;
+        const isToday = s.full === currentDay;
+        const dayNum = (i + 1) % 7;
         return (
-          <div class={`flex flex-col items-center justify-center py-3 rounded-xl border transition-all ${
-            isToday 
-              ? 'bg-gradient-to-b from-violet-500/20 to-violet-600/10 border-violet-500/50 shadow-sm shadow-violet-500/10' 
-              : 'bg-slate-800/40 border-slate-800'
-          }`}>
-            <span class={`text-[10px] uppercase font-bold tracking-wider mb-1 ${isToday ? 'text-violet-300' : 'text-slate-500'}`}>
-              {s.day.slice(0, 3)}
+          <button
+            class={`week-day-btn flex flex-col items-center py-2 px-1 rounded-lg transition-all ${
+              isToday
+                ? 'bg-violet-500/20 border border-violet-500/40'
+                : 'bg-slate-800/30 border border-transparent hover:bg-slate-800/50'
+            }`}
+            data-day={s.full}
+          >
+            <span class={`text-[10px] font-bold uppercase ${isToday ? 'text-violet-300' : 'text-slate-500'}`}>
+              {s.day}
             </span>
-            <span class={`text-lg leading-none ${
-              s.type === 'rest' ? 'opacity-50 grayscale' : ''
-            }`}>
-              {s.type === 'rest' ? '💤' : s.type === 'mandatory' ? '🔥' : '✨'}
+            <span class={`text-sm mt-0.5 ${s.type === 'rest' ? 'opacity-50' : ''}`}>
+              {s.type === 'rest' ? '💤' : s.type === 'training' ? '💪' : '✨'}
             </span>
-          </div>
+            <span class={`text-[8px] mt-0.5 ${isToday ? 'text-violet-400' : 'text-slate-600'}`}>
+              {s.focus.split(' ')[0]}
+            </span>
+          </button>
         );
       })}
     </div>
   </section>
 
-  <!-- Workout Plans -->
-  <div class="space-y-8">
-    
-    <!-- Path 1: Hybrid -->
-    <section>
-      <div class="flex items-center justify-between mb-3 px-1">
-        <div>
-          <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-            Hybrid Path
-            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-violet-500/20 text-violet-300 border border-violet-500/30 uppercase tracking-wide">Primary</span>
-          </h2>
-          <p class="text-xs text-slate-400 mt-0.5">Free weights & cables for max hypertrophy</p>
+  <!-- Quick Start -->
+  <section class="mb-8">
+    <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Quick Start</h2>
+    <div class="grid grid-cols-2 gap-3">
+      <a href="/workouts?path=hybrid" class="card p-4 hover:bg-slate-800/50 transition-colors">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-8 h-8 rounded-lg bg-violet-500/20 flex items-center justify-center">
+            <span class="text-violet-400 text-lg">🏋️</span>
+          </span>
+          <span class="text-sm font-semibold text-slate-200">Hybrid</span>
         </div>
-      </div>
-      <div class="space-y-3">
-        {hybridWorkouts.map(workout => (
-          <WorkoutCard 
-            title={workout.data.name}
-            subtitle={workout.data.description}
-            href={`/workouts/${workout.id}`}
-            exerciseCount={workout.data.exercises.length}
-          />
-        ))}
-      </div>
-    </section>
+        <p class="text-xs text-slate-500">Free weights & cables</p>
+        <p class="text-[10px] text-violet-400 mt-1">{hybridWorkouts.length} workouts</p>
+      </a>
 
-    <!-- Path 2: Machine -->
-    <section>
-      <div class="flex items-center justify-between mb-3 px-1">
-        <div>
-          <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-            Machine Path
-            <span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 uppercase tracking-wide">Stable</span>
-          </h2>
-          <p class="text-xs text-slate-400 mt-0.5">Machine-focused for controlled tension</p>
+      <a href="/workouts?path=machine" class="card p-4 hover:bg-slate-800/50 transition-colors">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-8 h-8 rounded-lg bg-sky-500/20 flex items-center justify-center">
+            <span class="text-sky-400 text-lg">🔧</span>
+          </span>
+          <span class="text-sm font-semibold text-slate-200">Machine</span>
         </div>
-      </div>
-      <div class="space-y-3">
-        {machineWorkouts.map(workout => (
-          <WorkoutCard 
-            title={workout.data.name}
-            subtitle={workout.data.description}
-            href={`/workouts/${workout.id}`}
-            badgeColor="sky"
-            exerciseCount={workout.data.exercises.length}
-          />
-        ))}
-      </div>
-    </section>
+        <p class="text-xs text-slate-500">Controlled tension</p>
+        <p class="text-[10px] text-sky-400 mt-1">{machineWorkouts.length} workouts</p>
+      </a>
+    </div>
+  </section>
 
-    <!-- Optional -->
-    <section>
-      <div class="flex items-center justify-between mb-3 px-1">
+  <!-- Resources -->
+  <section class="mb-6">
+    <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">Resources</h2>
+    <div class="space-y-2">
+      <a href="/search" class="card p-3 flex items-center gap-3 hover:bg-slate-800/50 transition-colors">
+        <span class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </span>
         <div>
-           <h2 class="text-lg font-bold text-slate-100">Optional Days</h2>
-           <p class="text-xs text-slate-400 mt-0.5">Tuesday & Saturday choices</p>
+          <p class="text-sm font-medium text-slate-200">Exercise Library</p>
+          <p class="text-xs text-slate-500">Browse 870+ exercises with demos</p>
         </div>
-      </div>
-      <div class="grid grid-cols-1 gap-3">
-        {optionalWorkouts.map(workout => (
-          <WorkoutCard 
-            title={workout.data.name}
-            subtitle={workout.data.description}
-            href={`/workouts/${workout.id}`}
-            badgeColor="emerald"
-            exerciseCount={workout.data.exercises.length}
-          />
-        ))}
-        {coreWorkout && (
-          <WorkoutCard 
-            title={coreWorkout.data.name}
-            subtitle={coreWorkout.data.description}
-            href={`/workouts/${coreWorkout.id}`}
-            badge="Home"
-            badgeColor="amber"
-            exerciseCount={coreWorkout.data.exercises.length}
-          />
-        )}
-      </div>
-    </section>
-  </div>
+        <svg class="w-5 h-5 text-slate-600 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+
+      <a href="/equipment" class="card p-3 flex items-center gap-3 hover:bg-slate-800/50 transition-colors">
+        <span class="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+        </span>
+        <div>
+          <p class="text-sm font-medium text-slate-200">My Equipment</p>
+          <p class="text-xs text-slate-500">Track your gym inventory</p>
+        </div>
+        <svg class="w-5 h-5 text-slate-600 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .week-day-btn {
+    min-width: 0;
+  }
+</style>

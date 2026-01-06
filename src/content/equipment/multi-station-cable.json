@@ -1,0 +1,9 @@
+{
+  "name": "Multi-Station Cable",
+  "category": "strength-pin-loaded",
+  "brand": "Life Fitness",
+  "notes": "Includes lat pulldown/rows",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["cable", "cables", "lat pulldown", "cable row"],
+  "available": true
+}

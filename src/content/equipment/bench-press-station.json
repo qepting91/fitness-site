@@ -1,0 +1,7 @@
+{
+  "name": "Bench Press Station",
+  "category": "strength-free-weights",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["barbell", "bench", "bench press"],
+  "available": true
+}

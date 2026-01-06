@@ -1,0 +1,9 @@
+{
+  "name": "Heavy Bag",
+  "category": "functional-accessory",
+  "brand": "Everlast",
+  "notes": "Hanging boxing bag",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["heavy bag", "punching bag", "boxing"],
+  "available": true
+}

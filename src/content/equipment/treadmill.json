@@ -1,0 +1,9 @@
+{
+  "name": "Treadmill",
+  "category": "cardio",
+  "brand": "Life Fitness",
+  "notes": "3 units visible",
+  "quantity": 3,
+  "exerciseEquipmentTags": ["treadmill", "cardio"],
+  "available": true
+}

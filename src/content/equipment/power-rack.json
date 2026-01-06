@@ -1,0 +1,9 @@
+{
+  "name": "Power Rack / Cage",
+  "category": "strength-free-weights",
+  "brand": "Body-Solid",
+  "notes": "2 units visible",
+  "quantity": 2,
+  "exerciseEquipmentTags": ["barbell", "squat rack", "power rack", "cage"],
+  "available": true
+}

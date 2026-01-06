@@ -1,0 +1,8 @@
+{
+  "name": "Elliptical",
+  "category": "cardio",
+  "brand": "Life Fitness",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["elliptical", "cardio"],
+  "available": true
+}

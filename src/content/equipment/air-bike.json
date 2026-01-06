@@ -1,0 +1,9 @@
+{
+  "name": "Air Bike",
+  "category": "cardio",
+  "brand": "Schwinn / Assault",
+  "notes": "Fan bike style",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["bike", "cardio", "air bike", "assault bike"],
+  "available": true
+}

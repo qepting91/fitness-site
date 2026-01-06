@@ -1,0 +1,284 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WorkoutCard from '../../components/WorkoutCard.astro';
+import { getCollection } from 'astro:content';
+
+const workouts = await getCollection('workouts');
+
+// Filter out template file
+const allWorkouts = workouts.filter(w => !w.id.startsWith('_'));
+
+// Prepare workout data for client-side filtering
+const workoutData = allWorkouts.map(w => ({
+  id: w.id,
+  name: w.data.name,
+  description: w.data.description,
+  path: w.data.path,
+  difficulty: w.data.difficulty,
+  duration: w.data.estimatedDuration,
+  muscleGroups: w.data.primaryMuscleGroups || [],
+  equipmentRequired: w.data.equipmentRequired || [],
+  tags: w.data.tags || [],
+  structure: w.data.structure,
+  exerciseCount: w.data.exercises.length,
+  scheduledDays: w.data.scheduledDays || [],
+}));
+
+// Get path badge color
+const getPathColor = (path: string) => {
+  const colors: Record<string, 'violet' | 'sky' | 'emerald' | 'amber'> = {
+    hybrid: 'violet',
+    machine: 'sky',
+    optional: 'emerald',
+    core: 'amber'
+  };
+  return colors[path] || 'violet';
+};
+
+// Get unique values for filters
+const paths = ['all', 'hybrid', 'machine', 'optional', 'core'];
+const difficulties = ['all', 'beginner', 'intermediate', 'advanced'];
+const muscleGroups = ['all', 'chest', 'back', 'shoulders', 'legs', 'arms', 'core', 'full-body'];
+---
+
+<BaseLayout title="Workouts">
+  <header class="mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h1 class="text-xl font-bold text-slate-100">All Workouts</h1>
+        <p class="text-sm text-slate-400 mt-1" id="results-count">
+          {allWorkouts.length} workouts available
+        </p>
+      </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="space-y-3">
+      <!-- Path Filter -->
+      <div>
+        <label class="text-xs text-slate-500 uppercase tracking-wider font-medium mb-1.5 block">Path</label>
+        <div class="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4">
+          {paths.map(path => (
+            <button
+              class={`filter-btn ${path === 'all' ? 'active' : ''}`}
+              data-filter="path"
+              data-value={path}
+            >
+              {path === 'all' ? 'All' : path.charAt(0).toUpperCase() + path.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Difficulty Filter -->
+      <div>
+        <label class="text-xs text-slate-500 uppercase tracking-wider font-medium mb-1.5 block">Difficulty</label>
+        <div class="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4">
+          {difficulties.map(diff => (
+            <button
+              class={`filter-btn ${diff === 'all' ? 'active' : ''}`}
+              data-filter="difficulty"
+              data-value={diff}
+            >
+              {diff === 'all' ? 'All' : diff.charAt(0).toUpperCase() + diff.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Muscle Group Filter -->
+      <div>
+        <label class="text-xs text-slate-500 uppercase tracking-wider font-medium mb-1.5 block">Focus</label>
+        <div class="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4">
+          {muscleGroups.map(muscle => (
+            <button
+              class={`filter-btn ${muscle === 'all' ? 'active' : ''}`}
+              data-filter="muscle"
+              data-value={muscle}
+            >
+              {muscle === 'all' ? 'All' : muscle.replace('-', ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Workout List -->
+  <div id="workout-list" class="space-y-3">
+    {allWorkouts.map(workout => (
+      <div
+        class="workout-item"
+        data-path={workout.data.path}
+        data-difficulty={workout.data.difficulty}
+        data-muscles={JSON.stringify(workout.data.primaryMuscleGroups || [])}
+      >
+        <WorkoutCard
+          title={workout.data.name}
+          subtitle={workout.data.description}
+          href={`/workouts/${workout.id}`}
+          badgeColor={getPathColor(workout.data.path)}
+          exerciseCount={workout.data.exercises.length}
+          difficulty={workout.data.difficulty}
+          duration={workout.data.estimatedDuration}
+          muscleGroups={workout.data.primaryMuscleGroups}
+          structure={workout.data.structure}
+        />
+      </div>
+    ))}
+  </div>
+
+  <!-- No Results -->
+  <div id="no-results" class="hidden text-center py-8">
+    <p class="text-slate-400">No workouts match your filters</p>
+    <button id="clear-filters" class="text-sm text-violet-400 hover:text-violet-300 mt-2">
+      Clear all filters
+    </button>
+  </div>
+</BaseLayout>
+
+<style>
+  .filter-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background-color: rgba(30, 41, 59, 0.6);
+    color: #94a3b8;
+    border: 1px solid rgba(51, 65, 85, 0.5);
+  }
+  .filter-btn:hover {
+    background-color: rgba(51, 65, 85, 0.6);
+    color: #cbd5e1;
+  }
+  .filter-btn.active {
+    background-color: rgba(139, 92, 246, 0.2);
+    color: #a78bfa;
+    border-color: rgba(139, 92, 246, 0.5);
+  }
+
+  .workout-item.hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  // Get URL params
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialPath = urlParams.get('path') || 'all';
+
+  // State
+  const filters = {
+    path: initialPath,
+    difficulty: 'all',
+    muscle: 'all',
+  };
+
+  // DOM elements
+  const workoutItems = document.querySelectorAll('.workout-item');
+  const resultsCount = document.getElementById('results-count');
+  const noResults = document.getElementById('no-results');
+  const clearFiltersBtn = document.getElementById('clear-filters');
+
+  // Set initial active state for path filter from URL
+  if (initialPath !== 'all') {
+    document.querySelectorAll('[data-filter="path"]').forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.getAttribute('data-value') === initialPath) {
+        btn.classList.add('active');
+      }
+    });
+  }
+
+  // Filter function
+  function applyFilters() {
+    let visibleCount = 0;
+
+    workoutItems.forEach(item => {
+      const itemPath = item.getAttribute('data-path');
+      const itemDifficulty = item.getAttribute('data-difficulty');
+      const itemMuscles = JSON.parse(item.getAttribute('data-muscles') || '[]');
+
+      let show = true;
+
+      // Path filter
+      if (filters.path !== 'all' && itemPath !== filters.path) {
+        show = false;
+      }
+
+      // Difficulty filter
+      if (filters.difficulty !== 'all' && itemDifficulty !== filters.difficulty) {
+        show = false;
+      }
+
+      // Muscle filter
+      if (filters.muscle !== 'all' && !itemMuscles.includes(filters.muscle)) {
+        show = false;
+      }
+
+      if (show) {
+        item.classList.remove('hidden');
+        visibleCount++;
+      } else {
+        item.classList.add('hidden');
+      }
+    });
+
+    // Update count
+    resultsCount.textContent = `${visibleCount} workout${visibleCount === 1 ? '' : 's'} found`;
+
+    // Show/hide no results
+    if (visibleCount === 0) {
+      noResults.classList.remove('hidden');
+    } else {
+      noResults.classList.add('hidden');
+    }
+
+    // Update URL
+    const url = new URL(window.location.href);
+    if (filters.path !== 'all') {
+      url.searchParams.set('path', filters.path);
+    } else {
+      url.searchParams.delete('path');
+    }
+    window.history.replaceState({}, '', url);
+  }
+
+  // Event listeners for filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filterType = btn.getAttribute('data-filter') as 'path' | 'difficulty' | 'muscle';
+      const value = btn.getAttribute('data-value') || 'all';
+
+      // Update active state
+      document.querySelectorAll(`[data-filter="${filterType}"]`).forEach(b => {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+
+      // Update filter
+      filters[filterType] = value;
+      applyFilters();
+    });
+  });
+
+  // Clear filters
+  clearFiltersBtn?.addEventListener('click', () => {
+    filters.path = 'all';
+    filters.difficulty = 'all';
+    filters.muscle = 'all';
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.getAttribute('data-value') === 'all') {
+        btn.classList.add('active');
+      }
+    });
+
+    applyFilters();
+  });
+
+  // Initial filter application
+  applyFilters();
+</script>

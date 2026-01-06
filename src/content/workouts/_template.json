@@ -1,0 +1,57 @@
+{
+  "_comment": "WORKOUT TEMPLATE - Copy this file and fill in the fields. Remove this _comment field.",
+
+  "name": "Workout Name",
+  "path": "hybrid",
+  "_path_options": ["hybrid", "machine", "optional", "core"],
+
+  "dayOfWeek": "monday",
+  "_dayOfWeek_note": "Legacy field - prefer scheduledDays for multiple days",
+
+  "scheduledDays": ["monday", "thursday"],
+  "_scheduledDays_options": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+
+  "description": "Brief description of the workout focus and format.",
+
+  "structure": "supersets",
+  "_structure_options": ["circuit", "supersets", "straight-sets", "emom", "amrap"],
+
+  "restBetweenSets": "90 seconds",
+  "rounds": 3,
+
+  "difficulty": "intermediate",
+  "_difficulty_options": ["beginner", "intermediate", "advanced"],
+
+  "estimatedDuration": 45,
+  "_estimatedDuration_note": "Duration in minutes",
+
+  "primaryMuscleGroups": ["chest", "shoulders"],
+  "_primaryMuscleGroups_options": ["chest", "back", "shoulders", "legs", "arms", "core", "full-body"],
+
+  "equipmentRequired": ["dumbbells", "bench", "cables"],
+  "_equipmentRequired_options": ["dumbbells", "barbell", "cables", "machines", "bodyweight", "kettlebells", "bands", "bench"],
+
+  "tags": ["push", "upper-body", "strength", "hypertrophy"],
+  "_tags_note": "Free-form tags for flexible filtering",
+
+  "exercises": [
+    {
+      "slug": "exercise-filename-without-json",
+      "sets": "3",
+      "reps": "10-12",
+      "notes": "Optional coaching cues or tips",
+      "supersetGroup": "1A",
+      "_supersetGroup_note": "Use 1A/1B, 2A/2B etc for superset pairs",
+      "restAfter": "60 seconds",
+      "_restAfter_note": "Override default rest for this exercise",
+      "tempo": "3-1-2-0",
+      "_tempo_note": "Eccentric-Pause-Concentric-Pause in seconds"
+    },
+    {
+      "slug": "second-exercise",
+      "sets": "3",
+      "reps": "10-12",
+      "supersetGroup": "1B"
+    }
+  ]
+}

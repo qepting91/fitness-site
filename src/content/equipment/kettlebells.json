@@ -1,0 +1,8 @@
+{
+  "name": "Kettlebells",
+  "category": "functional-accessory",
+  "notes": "With rack",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["kettlebell", "kettlebells"],
+  "available": true
+}

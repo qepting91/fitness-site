@@ -1,0 +1,9 @@
+{
+  "name": "Functional Trainer",
+  "category": "strength-pin-loaded",
+  "brand": "Cybex",
+  "notes": "Bravo model",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["cable", "functional trainer", "cables"],
+  "available": true
+}

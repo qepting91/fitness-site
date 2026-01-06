@@ -1,0 +1,8 @@
+{
+  "name": "Fixed Barbells",
+  "category": "strength-free-weights",
+  "notes": "Straight and EZ curl bars",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["barbell", "ez curl bar", "fixed barbell"],
+  "available": true
+}

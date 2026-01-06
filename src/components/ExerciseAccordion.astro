@@ -13,9 +13,11 @@ interface Props {
   reps: string;
   notes?: string;
   supersetGroup?: string;
+  tempo?: string;
+  restAfter?: string;
 }
 
-const { exercise, sets, reps, notes, supersetGroup } = Astro.props;
+const { exercise, sets, reps, notes, supersetGroup, tempo, restAfter } = Astro.props;
 ---
 
 <details class="exercise-details group">
@@ -23,15 +25,18 @@ const { exercise, sets, reps, notes, supersetGroup } = Astro.props;
     <div class="flex-1 min-w-0">
       <div class="flex items-center gap-2 mb-1">
         {supersetGroup && (
-          <span class="badge badge-superset">{supersetGroup}</span>
+          <span class="badge badge-superset text-[10px] font-bold">{supersetGroup}</span>
         )}
         <h3 class="font-semibold text-slate-100 truncate">{exercise.name}</h3>
       </div>
-      <div class="flex items-center gap-3 text-sm">
-        <span class="text-slate-400">{sets} × {reps}</span>
+      <div class="flex items-center gap-3 text-sm flex-wrap">
+        <span class="text-slate-300 font-medium">{sets} × {reps}</span>
+        {tempo && (
+          <span class="text-xs text-slate-500">Tempo: {tempo}</span>
+        )}
         <div class="flex gap-1">
-          {exercise.primaryMuscles.map(m => (
-            <span class="badge badge-muscle">{m}</span>
+          {exercise.primaryMuscles.slice(0, 2).map(m => (
+            <span class="badge badge-muscle text-[10px]">{m}</span>
           ))}
         </div>
       </div>
@@ -40,15 +45,15 @@ const { exercise, sets, reps, notes, supersetGroup } = Astro.props;
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
     </svg>
   </summary>
-  
+
   <div class="p-4 space-y-4">
     <!-- Exercise Images -->
     {exercise.images && exercise.images.length > 0 && (
-      <div class={`grid gap-4 ${exercise.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
-        {exercise.images.map((img, index) => (
-          <div class="relative aspect-video bg-slate-800 rounded-lg overflow-hidden">
-            <img 
-              src={img} 
+      <div class={`grid gap-3 ${exercise.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+        {exercise.images.slice(0, 2).map((img, index) => (
+          <div class="relative aspect-square bg-slate-800 rounded-lg overflow-hidden">
+            <img
+              src={img}
               alt={`${exercise.name} demonstration ${index + 1}`}
               class="w-full h-full object-contain"
               loading="lazy"
@@ -57,36 +62,55 @@ const { exercise, sets, reps, notes, supersetGroup } = Astro.props;
         ))}
       </div>
     )}
-    
-    <!-- Equipment & Notes -->
-    <div class="flex flex-wrap gap-2">
-      <span class="badge badge-equipment">{exercise.equipment}</span>
-      
+
+    <!-- Quick Info Row -->
+    <div class="flex flex-wrap gap-2 items-center">
+      <span class="badge badge-equipment">{exercise.equipment || 'Bodyweight'}</span>
+
       {/* Level Badge */}
       <span class={`badge ${
         exercise.level === 'beginner' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
         exercise.level === 'intermediate' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
-        'bg-rose-500/20 text-rose-400 border-rose-500/30'
+        exercise.level === 'advanced' ? 'bg-rose-500/20 text-rose-400 border-rose-500/30' :
+        'bg-slate-700/50 text-slate-400 border-slate-600/50'
       } border`}>
-        {exercise.level || 'Beginner'}
+        {exercise.level ? exercise.level.charAt(0).toUpperCase() + exercise.level.slice(1) : 'Beginner'}
       </span>
 
-      {notes && (
-        <span class="text-sm text-amber-400 italic">💡 {notes}</span>
+      {restAfter && (
+        <span class="text-xs text-slate-500">Rest: {restAfter}</span>
       )}
     </div>
-    
+
+    <!-- Notes -->
+    {notes && (
+      <div class="flex items-start gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+        <span class="text-amber-400 flex-shrink-0">💡</span>
+        <p class="text-sm text-amber-300/90">{notes}</p>
+      </div>
+    )}
+
+    <!-- All Muscles -->
+    {exercise.primaryMuscles.length > 2 && (
+      <div class="flex flex-wrap gap-1">
+        <span class="text-xs text-slate-500 mr-1">Targets:</span>
+        {exercise.primaryMuscles.map(m => (
+          <span class="badge badge-muscle text-[10px]">{m}</span>
+        ))}
+      </div>
+    )}
+
     <!-- Instructions -->
     {exercise.instructions.length > 0 && (
       <div class="space-y-2">
-        <h4 class="text-sm font-semibold text-slate-300 uppercase tracking-wide">Instructions</h4>
+        <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wide">How to perform</h4>
         <ol class="space-y-2 text-sm text-slate-400">
           {exercise.instructions.map((step, i) => (
             <li class="flex gap-3">
-              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-violet-500/20 text-violet-400 text-xs flex items-center justify-center font-medium">
+              <span class="flex-shrink-0 w-5 h-5 rounded-full bg-violet-500/20 text-violet-400 text-[10px] flex items-center justify-center font-bold">
                 {i + 1}
               </span>
-              <span class="pt-0.5">{step}</span>
+              <span class="pt-0.5 leading-relaxed">{step}</span>
             </li>
           ))}
         </ol>

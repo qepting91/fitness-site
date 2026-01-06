@@ -1,0 +1,8 @@
+{
+  "name": "Dumbbells",
+  "category": "strength-free-weights",
+  "notes": "Rubber Hex style (Full rack)",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["dumbbell", "dumbbells", "free weights"],
+  "available": true
+}

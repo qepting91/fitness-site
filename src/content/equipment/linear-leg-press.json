@@ -1,0 +1,8 @@
+{
+  "name": "Linear Leg Press",
+  "category": "strength-plate-loaded",
+  "notes": "45-degree angle",
+  "quantity": 1,
+  "exerciseEquipmentTags": ["machine", "leg press", "sled machine", "plate loaded"],
+  "available": true
+}

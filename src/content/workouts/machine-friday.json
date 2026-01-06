@@ -1,37 +1,43 @@
 {
-    "name": "Machine Friday: Lower Body Machines",
-    "path": "machine",
-    "dayOfWeek": "friday",
-    "description": "Lower body using machines for back safety and nerve protection.",
-    "structure": "straight sets",
-    "restBetweenSets": "60 seconds",
-    "exercises": [
-        {
-            "slug": "leg-press",
-            "sets": "4",
-            "reps": "10",
-            "notes": "Heavy"
-        },
-        {
-            "slug": "seated-leg-curl",
-            "sets": "4",
-            "reps": "12"
-        },
-        {
-            "slug": "leg-extensions",
-            "sets": "3",
-            "reps": "15"
-        },
-        {
-            "slug": "glute-kickback",
-            "sets": "3",
-            "reps": "12",
-            "notes": "Per leg - works glutes without spine load"
-        },
-        {
-            "slug": "seated-calf-raise",
-            "sets": "3",
-            "reps": "15"
-        }
-    ]
+  "name": "Machine Friday: Lower Body Machines",
+  "path": "machine",
+  "dayOfWeek": "friday",
+  "scheduledDays": ["friday"],
+  "description": "Lower body using machines for back safety and nerve protection.",
+  "structure": "straight-sets",
+  "restBetweenSets": "60 seconds",
+  "difficulty": "beginner",
+  "estimatedDuration": 40,
+  "primaryMuscleGroups": ["legs"],
+  "equipmentRequired": ["machines"],
+  "tags": ["lower-body", "machines", "beginner-friendly", "joint-safe", "back-safe"],
+  "exercises": [
+    {
+      "slug": "leg-press",
+      "sets": "4",
+      "reps": "10",
+      "notes": "Heavy"
+    },
+    {
+      "slug": "seated-leg-curl",
+      "sets": "4",
+      "reps": "12"
+    },
+    {
+      "slug": "leg-extensions",
+      "sets": "3",
+      "reps": "15"
+    },
+    {
+      "slug": "glute-kickback",
+      "sets": "3",
+      "reps": "12",
+      "notes": "Per leg - works glutes without spine load"
+    },
+    {
+      "slug": "seated-calf-raise",
+      "sets": "3",
+      "reps": "15"
+    }
+  ]
 }

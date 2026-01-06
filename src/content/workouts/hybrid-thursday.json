@@ -1,55 +1,61 @@
 {
-    "name": "Hybrid Thursday: Upper Body Supersets",
-    "path": "hybrid",
-    "dayOfWeek": "thursday",
-    "description": "Upper body focus with supersets. Perform A & B exercises back-to-back, rest 90 seconds.",
-    "structure": "supersets",
-    "restBetweenSets": "90 seconds",
-    "exercises": [
-        {
-            "slug": "incline-dumbbell-press",
-            "sets": "3",
-            "reps": "10-12",
-            "supersetGroup": "1A"
-        },
-        {
-            "slug": "dumbbell-lying-one-arm-rear-lateral-raise",
-            "sets": "3",
-            "reps": "10-12",
-            "supersetGroup": "1B",
-            "notes": "Chest-supported DB Row"
-        },
-        {
-            "slug": "seated-dumbbell-press",
-            "sets": "3",
-            "reps": "10",
-            "supersetGroup": "2A",
-            "notes": "Neutral grip"
-        },
-        {
-            "slug": "close-grip-front-lat-pulldown",
-            "sets": "3",
-            "reps": "12",
-            "supersetGroup": "2B"
-        },
-        {
-            "slug": "reverse-grip-triceps-pushdown",
-            "sets": "3",
-            "reps": "15",
-            "supersetGroup": "3A",
-            "notes": "Rope attachment"
-        },
-        {
-            "slug": "alternate-hammer-curl",
-            "sets": "3",
-            "reps": "12",
-            "supersetGroup": "3B"
-        },
-        {
-            "slug": "dumbbell-shrug",
-            "sets": "2",
-            "reps": "15",
-            "notes": "Finisher"
-        }
-    ]
+  "name": "Hybrid Thursday: Upper Body Supersets",
+  "path": "hybrid",
+  "dayOfWeek": "thursday",
+  "scheduledDays": ["thursday"],
+  "description": "Upper body focus with supersets. Perform A & B exercises back-to-back, rest 90 seconds.",
+  "structure": "supersets",
+  "restBetweenSets": "90 seconds",
+  "difficulty": "intermediate",
+  "estimatedDuration": 50,
+  "primaryMuscleGroups": ["chest", "back", "shoulders", "arms"],
+  "equipmentRequired": ["dumbbells", "cables", "bench"],
+  "tags": ["upper-body", "push-pull", "supersets", "hypertrophy"],
+  "exercises": [
+    {
+      "slug": "incline-dumbbell-press",
+      "sets": "3",
+      "reps": "10-12",
+      "supersetGroup": "1A"
+    },
+    {
+      "slug": "dumbbell-lying-one-arm-rear-lateral-raise",
+      "sets": "3",
+      "reps": "10-12",
+      "supersetGroup": "1B",
+      "notes": "Chest-supported DB Row"
+    },
+    {
+      "slug": "seated-dumbbell-press",
+      "sets": "3",
+      "reps": "10",
+      "supersetGroup": "2A",
+      "notes": "Neutral grip"
+    },
+    {
+      "slug": "close-grip-front-lat-pulldown",
+      "sets": "3",
+      "reps": "12",
+      "supersetGroup": "2B"
+    },
+    {
+      "slug": "reverse-grip-triceps-pushdown",
+      "sets": "3",
+      "reps": "15",
+      "supersetGroup": "3A",
+      "notes": "Rope attachment"
+    },
+    {
+      "slug": "alternate-hammer-curl",
+      "sets": "3",
+      "reps": "12",
+      "supersetGroup": "3B"
+    },
+    {
+      "slug": "dumbbell-shrug",
+      "sets": "2",
+      "reps": "15",
+      "notes": "Finisher"
+    }
+  ]
 }
