@@ -14,15 +14,6 @@ const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'frida
 const currentDay = dayNames[today.getDay()];
 const currentDayLabel = today.toLocaleDateString('en-US', { weekday: 'long' });
 
-// Find today's workouts
-const todaysWorkouts = allWorkouts.filter(w =>
-  w.data.scheduledDays?.includes(currentDay as any) ||
-  w.data.dayOfWeek?.toLowerCase().includes(currentDay)
-);
-
-// Check if today is a rest day
-const isRestDay = currentDay === 'wednesday' || currentDay === 'sunday';
-
 // Group workouts by path for quick access
 const hybridWorkouts = allWorkouts.filter(w => w.data.path === 'hybrid');
 const machineWorkouts = allWorkouts.filter(w => w.data.path === 'machine');
@@ -38,25 +29,40 @@ const getPathColor = (path: string) => {
   return colors[path] || 'violet';
 };
 
-// Schedule data with workout references
+// Prepare all workouts data for JavaScript
+const workoutsData = allWorkouts.map(w => ({
+  id: w.id,
+  name: w.data.name,
+  description: w.data.description,
+  path: w.data.path,
+  scheduledDays: w.data.scheduledDays || [],
+  dayOfWeek: w.data.dayOfWeek || '',
+  difficulty: w.data.difficulty,
+  estimatedDuration: w.data.estimatedDuration,
+  exerciseCount: w.data.exercises.length,
+  muscleGroups: w.data.primaryMuscleGroups,
+  structure: w.data.structure
+}));
+
+// Schedule data
 const schedule = [
-  { day: 'Mon', full: 'monday', type: 'training', focus: 'Full Body' },
-  { day: 'Tue', full: 'tuesday', type: 'optional', focus: 'Arms + Core' },
-  { day: 'Wed', full: 'wednesday', type: 'rest', focus: 'Rest' },
-  { day: 'Thu', full: 'thursday', type: 'training', focus: 'Upper Body' },
-  { day: 'Fri', full: 'friday', type: 'training', focus: 'Lower Body' },
-  { day: 'Sat', full: 'saturday', type: 'optional', focus: 'Arms + Core' },
-  { day: 'Sun', full: 'sunday', type: 'rest', focus: 'Rest' },
+  { day: 'Mon', full: 'monday', label: 'Monday', type: 'training', focus: 'Full Body' },
+  { day: 'Tue', full: 'tuesday', label: 'Tuesday', type: 'optional', focus: 'Arms + Core' },
+  { day: 'Wed', full: 'wednesday', label: 'Wednesday', type: 'rest', focus: 'Rest' },
+  { day: 'Thu', full: 'thursday', label: 'Thursday', type: 'training', focus: 'Upper Body' },
+  { day: 'Fri', full: 'friday', label: 'Friday', type: 'training', focus: 'Lower Body' },
+  { day: 'Sat', full: 'saturday', label: 'Saturday', type: 'optional', focus: 'Arms + Core' },
+  { day: 'Sun', full: 'sunday', label: 'Sunday', type: 'rest', focus: 'Rest' },
 ];
 ---
 
 <BaseLayout title="Home">
-  <!-- Today's Section -->
+  <!-- Selected Day Section -->
   <section class="mb-8">
     <div class="flex items-center justify-between mb-4">
       <div>
-        <p class="text-xs text-slate-500 uppercase tracking-wider font-medium">Today</p>
-        <h1 class="text-2xl font-bold text-slate-100">{currentDayLabel}</h1>
+        <p id="day-label-prefix" class="text-xs text-slate-500 uppercase tracking-wider font-medium">Today</p>
+        <h1 id="day-label" class="text-2xl font-bold text-slate-100">{currentDayLabel}</h1>
       </div>
       <a href="/workouts" class="text-sm text-violet-400 hover:text-violet-300 flex items-center gap-1">
         All Workouts
@@ -66,59 +72,28 @@ const schedule = [
       </a>
     </div>
 
-    {isRestDay ? (
-      <div class="card p-6 text-center">
-        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-800/50 flex items-center justify-center">
-          <span class="text-3xl">😴</span>
-        </div>
-        <h2 class="text-lg font-semibold text-slate-200 mb-1">Rest Day</h2>
-        <p class="text-sm text-slate-400">Take it easy and recover. Your muscles grow during rest!</p>
-        <div class="mt-4 pt-4 border-t border-slate-800">
-          <p class="text-xs text-slate-500 mb-2">Want to stay active?</p>
-          <a href="/workouts/core" class="text-sm text-amber-400 hover:text-amber-300">Try the Home Core Routine →</a>
-        </div>
-      </div>
-    ) : (
-      <div class="space-y-3">
-        {todaysWorkouts.length > 0 ? (
-          todaysWorkouts.map(workout => (
-            <WorkoutCard
-              title={workout.data.name}
-              subtitle={workout.data.description}
-              href={`/workouts/${workout.id}`}
-              badgeColor={getPathColor(workout.data.path)}
-              exerciseCount={workout.data.exercises.length}
-              difficulty={workout.data.difficulty}
-              duration={workout.data.estimatedDuration}
-              muscleGroups={workout.data.primaryMuscleGroups}
-              structure={workout.data.structure}
-              isToday={true}
-            />
-          ))
-        ) : (
-          <div class="card p-6 text-center">
-            <p class="text-slate-400">No scheduled workouts for today</p>
-          </div>
-        )}
-      </div>
-    )}
+    <!-- Workout cards container - will be updated by JavaScript -->
+    <div id="workouts-container" class="space-y-3">
+      <!-- Initial content rendered server-side, updated client-side -->
+    </div>
   </section>
 
-  <!-- Week Overview -->
+  <!-- Week Overview - Interactive -->
   <section class="mb-8">
     <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-3">This Week</h2>
     <div class="grid grid-cols-7 gap-1">
-      {schedule.map((s, i) => {
+      {schedule.map((s) => {
         const isToday = s.full === currentDay;
-        const dayNum = (i + 1) % 7;
         return (
           <button
-            class={`week-day-btn flex flex-col items-center py-2 px-1 rounded-lg transition-all ${
+            class={`week-day-btn flex flex-col items-center py-2 px-1 rounded-lg transition-all cursor-pointer ${
               isToday
                 ? 'bg-violet-500/20 border border-violet-500/40'
-                : 'bg-slate-800/30 border border-transparent hover:bg-slate-800/50'
+                : 'bg-slate-800/30 border border-transparent hover:bg-slate-800/50 hover:border-slate-700'
             }`}
             data-day={s.full}
+            data-label={s.label}
+            data-type={s.type}
           >
             <span class={`text-[10px] font-bold uppercase ${isToday ? 'text-violet-300' : 'text-slate-500'}`}>
               {s.day}
@@ -163,11 +138,171 @@ const schedule = [
     </div>
   </section>
 
-
 </BaseLayout>
+
+<script define:vars={{ workoutsData, currentDay, schedule }}>
+  // Color mapping for workout paths
+  const pathColors = {
+    hybrid: { bg: 'bg-violet-500/20', text: 'text-violet-400', border: 'border-violet-500/30' },
+    machine: { bg: 'bg-sky-500/20', text: 'text-sky-400', border: 'border-sky-500/30' },
+    optional: { bg: 'bg-emerald-500/20', text: 'text-emerald-400', border: 'border-emerald-500/30' },
+    core: { bg: 'bg-amber-500/20', text: 'text-amber-400', border: 'border-amber-500/30' }
+  };
+
+  function getWorkoutsForDay(day) {
+    return workoutsData.filter(w => 
+      w.scheduledDays?.includes(day) || 
+      w.dayOfWeek?.toLowerCase().includes(day)
+    );
+  }
+
+  function isRestDay(day) {
+    return day === 'wednesday' || day === 'sunday';
+  }
+
+  function renderWorkouts(day, label, isCurrentDay) {
+    const container = document.getElementById('workouts-container');
+    const dayLabel = document.getElementById('day-label');
+    const dayLabelPrefix = document.getElementById('day-label-prefix');
+    
+    if (!container || !dayLabel || !dayLabelPrefix) return;
+
+    // Update header
+    dayLabel.textContent = label;
+    dayLabelPrefix.textContent = isCurrentDay ? 'Today' : 'Selected';
+
+    const dayWorkouts = getWorkoutsForDay(day);
+    
+    if (isRestDay(day)) {
+      container.innerHTML = `
+        <div class="card p-6 text-center">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-800/50 flex items-center justify-center">
+            <span class="text-3xl">😴</span>
+          </div>
+          <h2 class="text-lg font-semibold text-slate-200 mb-1">Rest Day</h2>
+          <p class="text-sm text-slate-400">Take it easy and recover. Your muscles grow during rest!</p>
+          <div class="mt-4 pt-4 border-t border-slate-800">
+            <p class="text-xs text-slate-500 mb-2">Want to stay active?</p>
+            <a href="/workouts/core" class="text-sm text-amber-400 hover:text-amber-300">Try the Home Core Routine →</a>
+          </div>
+        </div>
+      `;
+    } else if (dayWorkouts.length === 0) {
+      container.innerHTML = `
+        <div class="card p-6 text-center">
+          <p class="text-slate-400">No scheduled workouts for ${label}</p>
+        </div>
+      `;
+    } else {
+      container.innerHTML = dayWorkouts.map(w => {
+        const colors = pathColors[w.path] || pathColors.hybrid;
+        const muscleGroups = w.muscleGroups || [];
+        return `
+          <a href="/workouts/${w.id}" class="card block p-4 hover:bg-slate-800/50 transition-colors">
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                ${isCurrentDay ? '<span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase bg-violet-500/30 text-violet-300 rounded mb-2">Today</span>' : ''}
+                <h3 class="text-base font-semibold text-slate-100">${w.name}</h3>
+                <p class="text-sm text-slate-400 mt-1 line-clamp-2">${w.description || ''}</p>
+                <div class="flex flex-wrap items-center gap-2 mt-3">
+                  <span class="px-2 py-0.5 text-[10px] font-medium ${colors.bg} ${colors.text} rounded capitalize">${w.difficulty || 'Intermediate'}</span>
+                  <span class="text-xs text-slate-500">⏱ ${w.estimatedDuration || 45} min</span>
+                  <span class="text-xs text-slate-500">• ${w.exerciseCount} exercises</span>
+                  <span class="text-xs text-slate-500 capitalize">• ${w.structure || 'Straight Sets'}</span>
+                </div>
+                <div class="flex flex-wrap gap-1 mt-2">
+                  ${muscleGroups.map(mg => `<span class="px-2 py-0.5 text-[10px] bg-slate-800 text-slate-400 rounded capitalize">${mg}</span>`).join('')}
+                </div>
+              </div>
+              <svg class="w-5 h-5 text-slate-600 ml-2 flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+  }
+
+  function updateButtonStyles(selectedDay) {
+    document.querySelectorAll('.week-day-btn').forEach(btn => {
+      const btnDay = btn.getAttribute('data-day');
+      const isSelected = btnDay === selectedDay;
+      const isToday = btnDay === currentDay;
+      
+      // Reset classes
+      btn.classList.remove('bg-violet-500/20', 'border-violet-500/40', 'bg-emerald-500/20', 'border-emerald-500/40');
+      btn.classList.add('bg-slate-800/30', 'border-transparent');
+      
+      // Update text colors
+      const dayText = btn.querySelector('span:first-child');
+      const focusText = btn.querySelector('span:last-child');
+      
+      if (dayText) {
+        dayText.classList.remove('text-violet-300', 'text-emerald-300');
+        dayText.classList.add('text-slate-500');
+      }
+      if (focusText) {
+        focusText.classList.remove('text-violet-400', 'text-emerald-400');
+        focusText.classList.add('text-slate-600');
+      }
+      
+      // Apply selected styles
+      if (isSelected) {
+        btn.classList.remove('bg-slate-800/30', 'border-transparent');
+        if (isToday) {
+          btn.classList.add('bg-violet-500/20', 'border-violet-500/40');
+          if (dayText) {
+            dayText.classList.remove('text-slate-500');
+            dayText.classList.add('text-violet-300');
+          }
+          if (focusText) {
+            focusText.classList.remove('text-slate-600');
+            focusText.classList.add('text-violet-400');
+          }
+        } else {
+          btn.classList.add('bg-emerald-500/20', 'border-emerald-500/40');
+          if (dayText) {
+            dayText.classList.remove('text-slate-500');
+            dayText.classList.add('text-emerald-300');
+          }
+          if (focusText) {
+            focusText.classList.remove('text-slate-600');
+            focusText.classList.add('text-emerald-400');
+          }
+        }
+      }
+    });
+  }
+
+  // Initialize: render current day's workouts
+  const currentSchedule = schedule.find(s => s.full === currentDay);
+  if (currentSchedule) {
+    renderWorkouts(currentDay, currentSchedule.label, true);
+    updateButtonStyles(currentDay);
+  }
+
+  // Add click handlers to day buttons
+  document.querySelectorAll('.week-day-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const day = btn.getAttribute('data-day');
+      const label = btn.getAttribute('data-label');
+      const isToday = day === currentDay;
+      
+      renderWorkouts(day, label, isToday);
+      updateButtonStyles(day);
+    });
+  });
+</script>
 
 <style>
   .week-day-btn {
     min-width: 0;
+  }
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 </style>
