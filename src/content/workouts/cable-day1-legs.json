@@ -1,0 +1,51 @@
+{
+    "name": "Machine Day 1: Legs (Quad/Calf Focus)",
+    "path": "machine",
+    "scheduledDays": [
+        "monday"
+    ],
+    "description": "Machine-based leg session focusing on quads and calves. Lower systemic fatigue, great when free weights are busy.",
+    "structure": "straight-sets",
+    "restBetweenSets": "60-90 seconds",
+    "difficulty": "beginner",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "legs"
+    ],
+    "equipmentRequired": [
+        "machines"
+    ],
+    "tags": [
+        "machine",
+        "legs",
+        "quad-focus",
+        "hypertrophy",
+        "5-day-cable"
+    ],
+    "exercises": [
+        {
+            "slug": "leg-press",
+            "sets": "4",
+            "reps": "10-12",
+            "restAfter": "90 seconds"
+        },
+        {
+            "slug": "leg-extensions",
+            "sets": "3",
+            "reps": "12-15",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "calf-press-on-the-leg-press-machine",
+            "sets": "3",
+            "reps": "15-20",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "stair-climber",
+            "sets": "1",
+            "reps": "10 min",
+            "notes": "Steady state cardio finisher"
+        }
+    ]
+}

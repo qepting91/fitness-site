@@ -1,0 +1,55 @@
+{
+    "name": "Hybrid Day 1: Lower Strength",
+    "path": "hybrid",
+    "scheduledDays": [
+        "monday"
+    ],
+    "description": "Heavy lower body compound movements for strength and bone density. Focus on proper form.",
+    "structure": "straight-sets",
+    "restBetweenSets": "90 seconds",
+    "difficulty": "intermediate",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "legs",
+        "core"
+    ],
+    "equipmentRequired": [
+        "barbell",
+        "dumbbells"
+    ],
+    "tags": [
+        "strength",
+        "lower-body",
+        "free-weights",
+        "compound",
+        "5-day-freeweight"
+    ],
+    "exercises": [
+        {
+            "slug": "barbell-squat",
+            "sets": "3",
+            "reps": "8",
+            "restAfter": "90 seconds",
+            "notes": "Or Goblet Squat with Dumbbell"
+        },
+        {
+            "slug": "romanian-deadlift",
+            "sets": "3",
+            "reps": "10",
+            "restAfter": "90 seconds"
+        },
+        {
+            "slug": "dumbbell-lunges",
+            "sets": "3",
+            "reps": "12",
+            "restAfter": "60 seconds",
+            "notes": "Walking or Static"
+        },
+        {
+            "slug": "plank",
+            "sets": "3",
+            "reps": "45 sec",
+            "restAfter": "60 seconds"
+        }
+    ]
+}

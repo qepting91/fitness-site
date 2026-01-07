@@ -1,0 +1,57 @@
+{
+    "name": "Hybrid Day 4: Athletic Conditioning",
+    "path": "hybrid",
+    "scheduledDays": [
+        "thursday"
+    ],
+    "description": "Explosive and functional movements for athletic performance and conditioning.",
+    "structure": "straight-sets",
+    "restBetweenSets": "60 seconds",
+    "difficulty": "intermediate",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "full-body",
+        "core"
+    ],
+    "equipmentRequired": [
+        "kettlebells",
+        "barbell",
+        "dumbbells"
+    ],
+    "tags": [
+        "conditioning",
+        "athletic",
+        "functional",
+        "free-weights",
+        "5-day-freeweight"
+    ],
+    "exercises": [
+        {
+            "slug": "kettlebell-swing",
+            "sets": "4",
+            "reps": "20",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "step-up-with-knee-raise",
+            "sets": "3",
+            "reps": "12 each leg",
+            "restAfter": "60 seconds",
+            "notes": "Use box"
+        },
+        {
+            "slug": "push-press",
+            "sets": "3",
+            "reps": "10",
+            "restAfter": "60 seconds",
+            "notes": "Barbell or Dumbbell"
+        },
+        {
+            "slug": "medicine-ball-slam",
+            "sets": "3",
+            "reps": "15",
+            "restAfter": "60 seconds",
+            "notes": "If Slam Ball available, else Woodchoppers"
+        }
+    ]
+}

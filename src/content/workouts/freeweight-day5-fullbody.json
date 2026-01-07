@@ -1,0 +1,52 @@
+{
+    "name": "Hybrid Day 5: Full Body Hypertrophy",
+    "path": "hybrid",
+    "scheduledDays": [
+        "friday"
+    ],
+    "description": "Moderate weight, higher reps full body session for muscle growth and endurance.",
+    "structure": "straight-sets",
+    "restBetweenSets": "60 seconds",
+    "difficulty": "intermediate",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "full-body"
+    ],
+    "equipmentRequired": [
+        "dumbbells",
+        "bench"
+    ],
+    "tags": [
+        "hypertrophy",
+        "full-body",
+        "free-weights",
+        "5-day-freeweight"
+    ],
+    "exercises": [
+        {
+            "slug": "dumbbell-squat",
+            "sets": "3",
+            "reps": "12",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "dumbbell-bench-press",
+            "sets": "3",
+            "reps": "12",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "stiff-legged-dumbbell-deadlift",
+            "sets": "3",
+            "reps": "12",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "renegade-row",
+            "sets": "3",
+            "reps": "10",
+            "restAfter": "60 seconds",
+            "notes": "Push-up position with DBs"
+        }
+    ]
+}

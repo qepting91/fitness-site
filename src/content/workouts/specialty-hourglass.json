@@ -1,0 +1,67 @@
+{
+    "name": "The Hourglass (Female Focus)",
+    "path": "optional",
+    "scheduledDays": [],
+    "description": "Targeting glutes, shoulders, and abs for a balanced hourglass physique. One-off session, schedule as desired.",
+    "structure": "straight-sets",
+    "restBetweenSets": "60 seconds",
+    "difficulty": "intermediate",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "legs",
+        "shoulders",
+        "core"
+    ],
+    "equipmentRequired": [
+        "barbell",
+        "dumbbells",
+        "cables"
+    ],
+    "tags": [
+        "female-focus",
+        "glutes",
+        "shoulders",
+        "specialty",
+        "hourglass"
+    ],
+    "exercises": [
+        {
+            "slug": "barbell-hip-thrust",
+            "sets": "4",
+            "reps": "12",
+            "restAfter": "60 seconds",
+            "notes": "Use Barbell Glute Bridge if Thrust not available"
+        },
+        {
+            "slug": "goblet-squat",
+            "sets": "3",
+            "reps": "15",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "dumbbell-lateral-raise",
+            "sets": "3",
+            "reps": "15",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "arnold-dumbbell-press",
+            "sets": "3",
+            "reps": "12",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "single-leg-cable-kickback",
+            "sets": "3",
+            "reps": "15 each leg",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "russian-twist",
+            "sets": "3",
+            "reps": "20",
+            "restAfter": "60 seconds",
+            "notes": "With Medicine Ball"
+        }
+    ]
+}

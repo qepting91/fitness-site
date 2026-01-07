@@ -1,0 +1,55 @@
+{
+    "name": "Machine Day 4: Posterior Chain (Hamstrings/Glutes/Core)",
+    "path": "machine",
+    "scheduledDays": [
+        "thursday"
+    ],
+    "description": "Machine-based posterior chain work targeting hamstrings, glutes, and abs.",
+    "structure": "straight-sets",
+    "restBetweenSets": "60-90 seconds",
+    "difficulty": "beginner",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "legs",
+        "core"
+    ],
+    "equipmentRequired": [
+        "machines",
+        "cables"
+    ],
+    "tags": [
+        "machine",
+        "posterior-chain",
+        "glutes",
+        "core",
+        "5-day-cable"
+    ],
+    "exercises": [
+        {
+            "slug": "seated-leg-curl",
+            "sets": "4",
+            "reps": "12",
+            "restAfter": "90 seconds"
+        },
+        {
+            "slug": "glute-kickback",
+            "sets": "3",
+            "reps": "12 each leg",
+            "restAfter": "60 seconds",
+            "notes": "Cable or Machine"
+        },
+        {
+            "slug": "ab-crunch-machine",
+            "sets": "3",
+            "reps": "15",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "cable-crunch",
+            "sets": "3",
+            "reps": "15",
+            "restAfter": "60 seconds",
+            "notes": "Use rope attachment"
+        }
+    ]
+}

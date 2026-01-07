@@ -1,0 +1,67 @@
+{
+    "name": "The V-Taper (Male Focus)",
+    "path": "optional",
+    "scheduledDays": [],
+    "description": "Targeting chest, back width, and arms for the classic V-taper look. One-off session, schedule as desired.",
+    "structure": "straight-sets",
+    "restBetweenSets": "60 seconds",
+    "difficulty": "intermediate",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "chest",
+        "back",
+        "arms"
+    ],
+    "equipmentRequired": [
+        "dumbbells",
+        "cables",
+        "barbell"
+    ],
+    "tags": [
+        "male-focus",
+        "v-taper",
+        "upper-body",
+        "specialty"
+    ],
+    "exercises": [
+        {
+            "slug": "incline-dumbbell-bench-press",
+            "sets": "4",
+            "reps": "8-10",
+            "restAfter": "90 seconds"
+        },
+        {
+            "slug": "wide-grip-lat-pulldown",
+            "sets": "4",
+            "reps": "10-12",
+            "restAfter": "90 seconds"
+        },
+        {
+            "slug": "upright-barbell-row",
+            "sets": "3",
+            "reps": "12",
+            "restAfter": "60 seconds",
+            "notes": "Or Dumbbell Side Lateral Raise"
+        },
+        {
+            "slug": "hammer-curls",
+            "sets": "3",
+            "reps": "10",
+            "restAfter": "0 seconds",
+            "notes": "Superset with Triceps Pushdown"
+        },
+        {
+            "slug": "triceps-pushdown",
+            "sets": "3",
+            "reps": "10",
+            "restAfter": "60 seconds",
+            "notes": "Superset with Hammer Curls"
+        },
+        {
+            "slug": "hanging-leg-raise",
+            "sets": "3",
+            "reps": "to failure",
+            "restAfter": "60 seconds"
+        }
+    ]
+}

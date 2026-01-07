@@ -1,0 +1,56 @@
+{
+    "name": "Hybrid Day 2: Upper Push",
+    "path": "hybrid",
+    "scheduledDays": [
+        "tuesday"
+    ],
+    "description": "Compound pressing movements for chest, shoulders, and triceps. Build foundation strength.",
+    "structure": "straight-sets",
+    "restBetweenSets": "90 seconds",
+    "difficulty": "intermediate",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "chest",
+        "shoulders",
+        "arms"
+    ],
+    "equipmentRequired": [
+        "barbell",
+        "dumbbells",
+        "bench"
+    ],
+    "tags": [
+        "strength",
+        "push",
+        "upper-body",
+        "free-weights",
+        "5-day-freeweight"
+    ],
+    "exercises": [
+        {
+            "slug": "barbell-bench-press-medium-grip",
+            "sets": "3",
+            "reps": "8-10",
+            "restAfter": "90 seconds"
+        },
+        {
+            "slug": "dumbbell-shoulder-press",
+            "sets": "3",
+            "reps": "10-12",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "dumbbell-incline-bench-press",
+            "sets": "3",
+            "reps": "10-12",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "dips-triceps-version",
+            "sets": "3",
+            "reps": "to failure",
+            "restAfter": "60 seconds",
+            "notes": "Or Bench Dips"
+        }
+    ]
+}

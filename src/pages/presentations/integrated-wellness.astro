@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Presentation from '../../components/Presentation.astro';
+
+// Generate slide paths
+// The filenames are like: The_Integrated_Wellness_System_page_1.png
+// We found there are 15 pages in the previous step.
+const totalSlides = 15;
+const images = Array.from({ length: totalSlides }, (_, i) => 
+  `/slides/integrated-wellness/The_Integrated_Wellness_System_page_${i + 1}.png`
+);
+---
+
+<BaseLayout pageTitle="Integrated Wellness System">
+  <div class="py-6">
+    <a href="/" class="inline-flex items-center text-accent hover:text-accent-hover mb-6 px-4 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+      </svg>
+      Back to Home
+    </a>
+    
+    <Presentation 
+      title="The Integrated Wellness System" 
+      images={images} 
+    />
+  </div>
+</BaseLayout>

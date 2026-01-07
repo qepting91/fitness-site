@@ -54,9 +54,9 @@ const workoutsCollection = defineCollection({
     difficulty: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
     estimatedDuration: z.number().optional(), // in minutes
     // Primary muscle groups targeted (for filtering)
-    primaryMuscleGroups: z.array(z.enum(['chest', 'back', 'shoulders', 'legs', 'arms', 'core', 'full-body'])).optional(),
-    // Equipment categories required
-    equipmentRequired: z.array(z.enum(['dumbbells', 'barbell', 'cables', 'machines', 'bodyweight', 'kettlebells', 'bands', 'bench'])).optional(),
+    primaryMuscleGroups: z.array(z.enum(['chest', 'back', 'shoulders', 'legs', 'arms', 'core', 'full-body', 'glutes', 'calves', 'biceps', 'triceps'])).optional(),
+    // Equipment categories required - free-form strings for flexibility
+    equipmentRequired: z.array(z.string()).optional(),
     // Tags for flexible filtering
     tags: z.array(z.string()).optional().default([]),
     exercises: z.array(z.object({

@@ -1,0 +1,55 @@
+{
+    "name": "Machine Day 3: Pull (Back/Biceps/Rear Delt)",
+    "path": "machine",
+    "scheduledDays": [
+        "wednesday"
+    ],
+    "description": "Cable-focused pull session for back width, biceps, and rear delts.",
+    "structure": "straight-sets",
+    "restBetweenSets": "60-90 seconds",
+    "difficulty": "beginner",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "back",
+        "arms",
+        "shoulders"
+    ],
+    "equipmentRequired": [
+        "cables",
+        "machines"
+    ],
+    "tags": [
+        "machine",
+        "pull",
+        "upper-body",
+        "hypertrophy",
+        "5-day-cable"
+    ],
+    "exercises": [
+        {
+            "slug": "wide-grip-lat-pulldown",
+            "sets": "4",
+            "reps": "10-12",
+            "restAfter": "90 seconds"
+        },
+        {
+            "slug": "seated-cable-rows",
+            "sets": "3",
+            "reps": "10-12",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "face-pull",
+            "sets": "3",
+            "reps": "15",
+            "restAfter": "60 seconds",
+            "notes": "Use rope attachment. Alt: Rear Delt Machine"
+        },
+        {
+            "slug": "cable-hammer-curls-rope-attachment",
+            "sets": "3",
+            "reps": "12",
+            "restAfter": "60 seconds"
+        }
+    ]
+}

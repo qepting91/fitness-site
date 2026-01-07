@@ -13,6 +13,7 @@
     "astro": "^5.16.6",
     "dotenv": "^17.2.3",
     "fuse.js": "^7.1.0",
+    "pdf-to-png-converter": "^3.11.0",
     "tailwindcss": "^4.1.18"
   }
 }

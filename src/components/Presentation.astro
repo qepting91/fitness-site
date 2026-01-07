@@ -1,0 +1,142 @@
+---
+interface Props {
+  title: string;
+  images: string[];
+}
+
+const { title, images } = Astro.props;
+---
+
+<div class="presentation-container not-prose">
+  <!-- Header with title and navigation -->
+  <div class="flex items-center justify-between mb-4 px-4">
+    <h1 class="text-xl md:text-2xl font-bold text-slate-100">{title}</h1>
+    <div class="flex items-center gap-3">
+      <span id="slide-indicator" class="text-sm text-slate-400">1 / {images.length}</span>
+      <div class="flex gap-2">
+        <button id="prev-btn" class="p-2 rounded-full bg-slate-700 hover:bg-slate-600 text-slate-200 transition-colors disabled:opacity-50" aria-label="Previous slide">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button id="next-btn" class="p-2 rounded-full bg-slate-700 hover:bg-slate-600 text-slate-200 transition-colors disabled:opacity-50" aria-label="Next slide">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Slide Carousel - each slide takes full width and shows one at a time -->
+  <div id="carousel" class="carousel">
+    {images.map((img, index) => (
+      <div class="slide" data-index={index}>
+        <img 
+          src={img} 
+          alt={`${title} - Slide ${index + 1}`} 
+          loading={index < 2 ? "eager" : "lazy"}
+        />
+      </div>
+    ))}
+  </div>
+
+  <div class="text-center text-sm text-slate-500 mt-3 md:hidden">
+    Swipe left or right to navigate
+  </div>
+</div>
+
+<script define:vars={{ totalSlides: images.length }}>
+  const carousel = document.getElementById('carousel');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const indicator = document.getElementById('slide-indicator');
+  
+  let currentSlide = 0;
+  
+  function updateIndicator() {
+    if (indicator) {
+      indicator.textContent = `${currentSlide + 1} / ${totalSlides}`;
+    }
+  }
+  
+  function scrollToSlide(index) {
+    if (!carousel) return;
+    const slides = carousel.querySelectorAll('.slide');
+    if (slides[index]) {
+      slides[index].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      currentSlide = index;
+      updateIndicator();
+    }
+  }
+
+  if (carousel && prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', () => {
+      if (currentSlide > 0) {
+        scrollToSlide(currentSlide - 1);
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentSlide < totalSlides - 1) {
+        scrollToSlide(currentSlide + 1);
+      }
+    });
+    
+    // Update indicator on scroll
+    carousel.addEventListener('scroll', () => {
+      const slides = carousel.querySelectorAll('.slide');
+      const scrollLeft = carousel.scrollLeft;
+      const slideWidth = carousel.clientWidth;
+      const newIndex = Math.round(scrollLeft / slideWidth);
+      if (newIndex !== currentSlide && newIndex >= 0 && newIndex < totalSlides) {
+        currentSlide = newIndex;
+        updateIndicator();
+      }
+    });
+  }
+</script>
+
+<style>
+  .presentation-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    gap: 0;
+  }
+  
+  .carousel::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari */
+  }
+  
+  .slide {
+    flex: 0 0 100%;
+    width: 100%;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+  
+  .slide img {
+    max-width: 100%;
+    max-height: calc(100vh - 200px); /* Leave room for header and nav */
+    height: auto;
+    width: auto;
+    object-fit: contain;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(100, 116, 139, 0.3);
+  }
+</style>

@@ -1,0 +1,56 @@
+{
+    "name": "Hybrid Day 3: Upper Pull",
+    "path": "hybrid",
+    "scheduledDays": [
+        "wednesday"
+    ],
+    "description": "Compound pulling movements for back thickness and biceps. Focus on mind-muscle connection.",
+    "structure": "straight-sets",
+    "restBetweenSets": "90 seconds",
+    "difficulty": "intermediate",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "back",
+        "arms"
+    ],
+    "equipmentRequired": [
+        "barbell",
+        "dumbbells",
+        "bodyweight"
+    ],
+    "tags": [
+        "strength",
+        "pull",
+        "upper-body",
+        "free-weights",
+        "5-day-freeweight"
+    ],
+    "exercises": [
+        {
+            "slug": "bent-over-barbell-row",
+            "sets": "3",
+            "reps": "8-10",
+            "restAfter": "90 seconds"
+        },
+        {
+            "slug": "pullups",
+            "sets": "3",
+            "reps": "to failure",
+            "restAfter": "90 seconds",
+            "notes": "Or Assisted Pull-Up / Lat Pulldown"
+        },
+        {
+            "slug": "one-arm-dumbbell-row",
+            "sets": "3",
+            "reps": "12",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "barbell-curl",
+            "sets": "3",
+            "reps": "10-12",
+            "restAfter": "60 seconds",
+            "notes": "Or Dumbbell Bicep Curl"
+        }
+    ]
+}

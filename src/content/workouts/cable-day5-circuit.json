@@ -1,0 +1,55 @@
+{
+    "name": "Machine Day 5: Full Body Pump Circuit",
+    "path": "machine",
+    "scheduledDays": [
+        "friday"
+    ],
+    "description": "High-rep machine circuit for metabolic pump. Perform as 3 rounds with minimal rest between exercises.",
+    "structure": "circuit",
+    "restBetweenSets": "Minimal rest between exercises, 2 min between rounds",
+    "rounds": 3,
+    "difficulty": "intermediate",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "full-body"
+    ],
+    "equipmentRequired": [
+        "machines",
+        "cables"
+    ],
+    "tags": [
+        "machine",
+        "circuit",
+        "conditioning",
+        "full-body",
+        "5-day-cable"
+    ],
+    "exercises": [
+        {
+            "slug": "seated-row-machine",
+            "sets": "3",
+            "reps": "15"
+        },
+        {
+            "slug": "cable-chest-press",
+            "sets": "3",
+            "reps": "15"
+        },
+        {
+            "slug": "leg-press",
+            "sets": "3",
+            "reps": "20"
+        },
+        {
+            "slug": "cable-crunch",
+            "sets": "3",
+            "reps": "20",
+            "notes": "Rope crunch"
+        },
+        {
+            "slug": "battling-ropes",
+            "sets": "3",
+            "reps": "30 sec"
+        }
+    ]
+}

@@ -1,0 +1,55 @@
+{
+    "name": "Machine Day 2: Push (Chest/Shoulders/Triceps)",
+    "path": "machine",
+    "scheduledDays": [
+        "tuesday"
+    ],
+    "description": "Cable-focused push session targeting chest, shoulders, and triceps with controlled movements.",
+    "structure": "straight-sets",
+    "restBetweenSets": "60-90 seconds",
+    "difficulty": "beginner",
+    "estimatedDuration": 45,
+    "primaryMuscleGroups": [
+        "chest",
+        "shoulders",
+        "arms"
+    ],
+    "equipmentRequired": [
+        "cables",
+        "machines"
+    ],
+    "tags": [
+        "machine",
+        "push",
+        "upper-body",
+        "hypertrophy",
+        "5-day-cable"
+    ],
+    "exercises": [
+        {
+            "slug": "cable-chest-press",
+            "sets": "3",
+            "reps": "10-12",
+            "restAfter": "90 seconds"
+        },
+        {
+            "slug": "butterfly",
+            "sets": "3",
+            "reps": "12-15",
+            "restAfter": "60 seconds",
+            "notes": "Pec Deck"
+        },
+        {
+            "slug": "cable-shoulder-press",
+            "sets": "3",
+            "reps": "12",
+            "restAfter": "60 seconds"
+        },
+        {
+            "slug": "triceps-pushdown",
+            "sets": "3",
+            "reps": "12-15",
+            "restAfter": "60 seconds"
+        }
+    ]
+}
