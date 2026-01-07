@@ -3,26 +3,119 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Presentation from '../../components/Presentation.astro';
 
 // Generate slide paths
-// The filenames are like: Two_Paths_to_Lasting_Fitness_page_1.png
-// We found there are 14 pages in the previous step.
 const totalSlides = 14;
 const images = Array.from({ length: totalSlides }, (_, i) => 
   `/slides/lasting-fitness/Two_Paths_to_Lasting_Fitness_page_${i + 1}.png`
 );
+
+// TL;DR content for users who don't want to view the full presentation
+const tldr = {
+  title: "Two Paths to Lasting Fitness",
+  subtitle: "Understanding the cardio vs. resistance training debate",
+  comparisons: [
+    {
+      path: "Cardio Path",
+      icon: "🏃",
+      color: "sky",
+      pros: ["Burns calories quickly", "Improves heart health", "Mood boosting endorphins"],
+      cons: ["Can break down muscle", "Plateaus quickly", "Time-intensive"]
+    },
+    {
+      path: "Resistance Path", 
+      icon: "🏋️",
+      color: "violet",
+      pros: ["Builds lean muscle", "Boosts metabolism 24/7", "Preserves bone density"],
+      cons: ["Slower visible results", "Requires learning form", "Needs equipment access"]
+    }
+  ],
+  verdict: "Both paths have merit, but for most people in their 30s+, resistance training provides better long-term results. The ideal approach? Combine both with a focus on strength.",
+  recommendation: "Start with 2-3 resistance sessions per week, add 1-2 cardio sessions for heart health."
+};
 ---
 
 <BaseLayout pageTitle="Two Paths to Lasting Fitness">
   <div class="py-6">
-    <a href="/" class="inline-flex items-center text-accent hover:text-accent-hover mb-6 px-4 transition-colors">
+    <a href="/presentations" class="inline-flex items-center text-accent hover:text-accent-hover mb-6 px-4 transition-colors">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
       </svg>
-      Back to Home
+      Back to Presentations
     </a>
     
     <Presentation 
       title="Two Paths to Lasting Fitness" 
       images={images} 
     />
+
+    <!-- TL;DR Section -->
+    <section class="mt-12 px-4 max-w-4xl mx-auto">
+      <div class="card p-6 md:p-8 border border-slate-700/50">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-2xl">📋</span>
+          <h2 class="text-xl font-bold text-slate-100">TL;DR Summary</h2>
+        </div>
+        
+        <p class="text-slate-300 mb-6">{tldr.subtitle}</p>
+        
+        <!-- Comparison Grid -->
+        <div class="grid md:grid-cols-2 gap-4 mb-6">
+          {tldr.comparisons.map(comp => (
+            <div class={`bg-${comp.color}-500/10 border border-${comp.color}-500/30 rounded-lg p-4`}>
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-2xl">{comp.icon}</span>
+                <h3 class={`font-bold text-${comp.color}-300`}>{comp.path}</h3>
+              </div>
+              
+              <div class="space-y-2">
+                <div>
+                  <p class="text-xs text-slate-400 uppercase mb-1">Pros</p>
+                  <ul class="text-sm text-slate-300 space-y-1">
+                    {comp.pros.map(pro => (
+                      <li class="flex items-start gap-1">
+                        <span class="text-emerald-400">✓</span> {pro}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div>
+                  <p class="text-xs text-slate-400 uppercase mb-1">Cons</p>
+                  <ul class="text-sm text-slate-300 space-y-1">
+                    {comp.cons.map(con => (
+                      <li class="flex items-start gap-1">
+                        <span class="text-rose-400">✗</span> {con}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <!-- Verdict -->
+        <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 mb-4">
+          <p class="text-sm text-emerald-300">
+            <span class="font-semibold">⚖️ The Verdict:</span> {tldr.verdict}
+          </p>
+        </div>
+        
+        <div class="bg-violet-500/10 border border-violet-500/30 rounded-lg p-4">
+          <p class="text-sm text-violet-300">
+            <span class="font-semibold">💡 Recommendation:</span> {tldr.recommendation}
+          </p>
+        </div>
+      </div>
+    </section>
   </div>
 </BaseLayout>
+
+<style>
+  /* Fallback for dynamic colors */
+  .bg-sky-500\/10 { background-color: rgb(14 165 233 / 0.1); }
+  .border-sky-500\/30 { border-color: rgb(14 165 233 / 0.3); }
+  .text-sky-300 { color: rgb(125 211 252); }
+  .bg-violet-500\/10 { background-color: rgb(139 92 246 / 0.1); }
+  .border-violet-500\/30 { border-color: rgb(139 92 246 / 0.3); }
+  .text-violet-300 { color: rgb(196 181 253); }
+</style>
